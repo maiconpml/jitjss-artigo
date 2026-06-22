@@ -1,0 +1,18 @@
+\chapter{Conclusão} \label{chapt:conclusao}
+
+Neste trabalho, apresentamos a aplicação das técnicas de \ac{AAC} e \ac{AAD} para a resolução do problema \ac{JITJSS}. A motivação central fundamentou-se na eliminação do viés humano e do esforço mecânico associados ao desenvolvimento manual de heurísticas, propondo, em contrapartida, um espaço de projeto estruturado e explorado de forma sistemática pelo pacote \textit{irace}.
+
+Nossas contribuições incluem a nova vizinhança \texttt{troca\_crit} para o problema \ac{JITJSS}, construída a partir do estudo das componentes da literatura. Com isso, a partir da aplicação das técnicas de \ac{AAD}, constatamos que a inclusão no espaço de projeto dessa vizinhança, focada no caminho crítico individual de operações atrasadas, mostrou-se determinante, sendo integrada pelo configurador em 80\% das soluções de elite.
+
+Além disso, como resultado do processo de \ac{AAD}, propomos um novo algoritmo estado da arte para o \ac{JITJSS}. O algoritmo proposto superou ou igualou o estado da arte da literatura em 72,2\% das 72 instâncias de teste. Adicionalmente, ao analisarmos a eficiência temporal, observamos que, embora o limite de tempo estivesse fixado em 60 segundos, o algoritmo encontrou a solução final, em média, aos 21,1 segundos de execução, evidenciando uma rápida velocidade de convergência.
+
+Dessa forma, concluímos que os experimentos conduzidos validaram a hipótese inicial de que o projeto automático é capaz de derivar algoritmos competitivos. Outrossim, os experimentos demonstraram que as componentes algoritmicas propostas são particularmente efetivas gerando algoritmos que superam o estado da arte na maioria das instâncias. Nessa perspectiva, o processo de configuração utilizando o \textit{irace} convergiu para uma região de alto desempenho, resultando na configuração elite C1, caracterizada como uma Busca Tabu Iterada. 
+
+Como limitações da abordagem atual, apontamos a ausência de um critério de parada antecipada na heurística de busca e a restrição do nível de recursão da gramática para evitar a complexidade excessiva no processo de amostragem do configurador.
+
+Para trabalhos futuros, listamos as seguintes frentes de pesquisa:
+\begin{itemize}
+    \item \textbf{Ampliação do Espaço de Projeto:} Inclusão de novos operadores de busca de solução única, como Algoritmos Genéticos, Busca em Grandes Vizinhanças ou Recozimento Simulado, diretamente como blocos terminais da gramática;
+    \item \textbf{Análise de Instâncias de Larga Escala:} Aplicação do algoritmo gerado sobre novos conjuntos de instâncias com dimensões superiores a 20 tarefas e 10 máquinas para avaliar o comportamento do algoritmo sob estresse computacional.
+    \item \textbf{Aplicação sobre novos domínios:} Aplicação do algoritmo gerado em novos problemas com propriedades similares ao \ac{JITJSS}. A exemplo, temos o problema \textit{Just-In-Time Job Shop with Setup Times} que é idêntico ao \ac{JITJSS}, mas adicionando tempos de troca entre operações processadas na mesma máquina.
+\end{itemize}

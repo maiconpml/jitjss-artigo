@@ -1,0 +1,114 @@
+﻿\chapter{Metodologia} \label{chapt:metodologia}
+
+Para atingir os objetivos especificados no Capítulo \ref{cap:intro}, realizamos um processo baseado no fluxo dos trabalhos relacionados de \ac{AAD}. Primeiramente, realizamos uma seleção de componentes algorítmicos de alto e baixo nível da literatura para compor nosso espaço de projeto. Esses componentes foram prioritariamente selecionados da literatura do \ac{JITJSS}, mas também consideramos estratégias de outros problemas de agendamento na construção do espaço de projeto. Além disso, propomos um novo componente heurístico para o problema \ac{JITJSS}, visando enriquecer o espaço de projeto com características específicas do problema que ainda não foram exploradas.
+
+Após definir o espaço de projeto, fizemos a configuração do cenário de projeto para iniciar a construção automática de algoritmos. Para isso, analisamos o espaço de projeto e parametrizamos a geração de algoritmos em um \textit{framework} configurável. Especificamente, implementamos cada um dos componentes do espaço de projeto de maneira que fossem combináveis por meio de parâmetros em um algoritmo.
+
+Definimos também o conjunto de instâncias que foi utilizado no cenário de projeto automático. Nesse sentido, para obter resultados significativos, definimos um conjunto de treino e outro conjunto de teste. Utilizamos as instâncias descritas na Seção \ref{sect:materiais} como instâncias de teste. E utilizamos o processo de geração descrito na Seção \ref{sect:materiais} para gerar um novo conjunto de instâncias de treino.
+
+Com esses elementos estabelecidos, analisamos o cenário de projeto proposto e definimos o recurso computacional disponível para o algoritmo configurador. Com isso, executamos o algoritmo configurador para explorar o espaço de projeto. Ao fim do processo, realizamos a validação dos algoritmos obtidos utilizando o conjunto de instâncias de teste.
+
+Por fim, para validar a qualidade das estratégias encontradas, realizamos a comparação dos resultados com o estado da arte. Essa comparação foi quantificada por meio da diferença percentual entre a melhor solução conhecida e a solução obtida pelas estratégias encontradas.
+
+\section{Materiais} \label{sect:materiais}
+
+Todos os trabalhos que abordaram o \ac{JITJSS} utilizam as instâncias propostas por \cite{baptiste2008lagrangian} como métrica de qualidade. Por isso, também utilizamos essas instâncias para testar nossas estratégias. Descrevemos aqui como o autor gerou essas instâncias, pois utilizaremos o mesmo procedimento para gerar novas instâncias.
+
+Para cada par $(n,m)$, onde $n \in \{10, 15, 20\}$ e $m \in \{2, 5,10\}$, foram geradas 8 instâncias, formando um total de 72 instâncias. Cada instância possui um nome na forma n-m-DD-W-ID, onde DD, W e ID são determinados das seguintes maneiras:
+
+\begin{itemize}
+  \item DD indica o tipo de distância entre datas de entrega de operações consecutivas da mesma tarefa. Caso DD=tight, essa distância é igual ao peso da segunda operação. Caso DD=loose, essa distância é igual ao peso da segunda operação mais um valor inteiro selecionado aleatoriamente no intervalo $[0,10]$.
+  \item W indica a forma como as penalidades de adiantamento e atraso $(\alpha, \beta)$ de cada operação são geradas. Caso W=equal, temos que $\alpha$ e $\beta$ são selecionados aleatoriamente no intervalo $[0,1; 1]$. Caso W=tard, temos que $\alpha$ é selecionado aleatoriamente no intervalo $[0,1;0,3$, enquanto $\beta$ é selecionado aleatoriamente no intervalo $[0,1;1]$.  
+  \item Foram geradas duas instâncias para cada uma das combinações das outras variáveis. Dessa forma, a variável ID varia entre 1 e 2 e identifica as duas instâncias com a mesma combinação das outras variáveis.
+\end{itemize}
+
+Realizamos todas as implementações na linguagem de programação \texttt{C++}. Além disso, a respeito do processo de configuração, utilizaremos a biblioteca \texttt{Irace} \citep{lopez2016irace} na versão 4.4.3 para explorar nosso espaço de projeto de algoritmos. Todos os processos que utilizarem o solver CPLEX se referem a \cite{cplex22} na versão 22.1.1.0. Além disso, toda a geração de números aleatórios foi realizada utilizando a biblioteca PCG \citep{oneill:pcg2014}. Ainda nesse âmbito, os processos de configuração e testes serão realizados em uma máquina com um processador Intel Core i5-11300H, com frequência de $3,1$ GHz e 24 GB de memória RAM, executando o sistema operacional Arch Linux.
+
+\section{Atividades}
+
+As seguintes atividades foram realizadas no desenvolvimento deste trabalho:
+
+\begin{enumerate}
+    \item Selecionar componentes algorítmicos da literatura.
+    \item Implementar componentes em um \textit{framework} configurável.
+    \item Desenvolver um novo componente para o problema e incrementar o espaço de projeto com esse novo componente.
+    \item Gerar o conjunto de instâncias de treinamento.
+    \item Configurar e executar o algoritmo configurador sobre o espaço de projeto. \label{atvd:5}
+    \item Validar o algoritmo obtido pelo configurador por meio de uma comparação com o estado da arte nas instâncias de teste.
+    \item Realizar ajustes no cenário de projeto e repetir a Atividade \ref{atvd:5}.
+    \item Documentar o algoritmo e os resultados.
+    \item Finalizar a escrita do trabalho.
+    
+\end{enumerate}
+
+\section{Cronograma}
+
+\subsection{Proposta de cronograma inicial}
+
+A Tabela \ref{tab:cronograma1} exibe a proposta inicial do cronograma das atividades que seria realizada.
+
+\begin{table}[h!]
+\centering
+\caption{Proposta de cronograma inicial}
+\label{tab:cronograma1}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Atividades} & \textbf{Jan.} & \textbf{Fev.} & \textbf{Mar.} & \textbf{Abr.} & \textbf{Maio} & \textbf{Jun.}\\ 
+\hline
+\textbf{1}         &     x     &      x     &        &          &           &    \\          
+\hline
+\textbf{2}         &      x    &       x    &        &          &           &    \\          
+\hline
+\textbf{3}         &      x    &      x     &        &          &           &    \\          
+\hline
+\textbf{4}         &          &      x     &        &          &           &    \\          
+\hline
+\textbf{5}         &          &           &    x    &     x     &           &    \\          
+\hline
+\textbf{6}         &          &           &    x    &    x      &           &    \\          
+\hline
+\textbf{7}         &          &           &    x    &     x     &           &    \\          
+\hline
+\textbf{8}         &          &           &    x   &      x    &      x     &    \\          
+\hline
+\textbf{9}         &          &           &        &         &     x     &   x \\          
+\hline
+\end{tabular}
+    \caption*{\small \textbf{Fonte:} Os Autores.}
+
+\end{table}
+
+\subsection{Cronograma executado}
+
+A Tabela \ref{tab:cronograma2} exibe o cronograma das atividades da forma que foram realizadas.
+
+\begin{table}[h!]
+\centering
+\caption{Cronograma de atividades realizado}
+\label{tab:cronograma2}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{Atividades} & \textbf{Jan.} & \textbf{Fev.} & \textbf{Mar.} & \textbf{Abr.} & \textbf{Maio} & \textbf{Jun.}\\ 
+\hline
+\textbf{1}         &     x     &      x     &        &          &           &    \\          
+\hline
+\textbf{2}         &      x    &       x    &        &          &           &    \\          
+\hline
+\textbf{3}         &      x    &      x     &        &          &           &    \\          
+\hline
+\textbf{4}         &          &           &    x    &          &           &    \\          
+\hline
+\textbf{5}         &          &           &    x    &     x     &           &    \\          
+\hline
+\textbf{6}         &          &           &    x    &    x      &           &    \\          
+\hline
+\textbf{7}         &          &           &    x    &     x     &           &    \\          
+\hline
+\textbf{8}         &          &           &    x   &      x    &           &    \\          
+\hline
+\textbf{9}         &          &           &        &     x    &     x     &    \\          
+\hline
+\end{tabular}
+    \caption*{\small \textbf{Fonte:} Os Autores.}
+
+\end{table}
