@@ -1,0 +1,37 @@
+\begin{table}[ht]
+\centering
+\caption{Computational results of configuration C1 for instances with 15 jobs.}
+\label{tab:results_15}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccccc}
+\hline
+\textbf{Instance}                & \textbf{Cplex}           & \textbf{[1]}          & \textbf{[2]}            & \textbf{[3]}        & \textbf{[4]}       & \textbf{[5]}        & \textbf{$B$} & \textbf{$M$}   \\
+\hline
+loose-equal-1-15x2  & \textbf{1041.33} & \textbf{1041.33} & \textbf{1041.33} & \textbf{1041.33} & \textbf{1041.33} & \textbf{1041.33} & \textbf{1041.33}    & \textbf{1041.33}  \\
+loose-equal-2-15x2  & \textbf{497.97}  & \textbf{497.97}  & 514.72          & 512.54          & \textbf{497.97}  & \textbf{497.97}    & \textbf{497.97}     & 505.16           \\
+loose-equal-1-15x5  & 3457.57         & 3220.16         & 3321.54         & 3272.46         & 3258.72         & 3229.16               & \textbf{3196.85}    & 3247.89  \\
+loose-equal-2-15x5  & 3437.32         & 3328.86         & 3310.27         & 3260.81         & 3255.13         & \textbf{3251.84}      & 3274.38             & 3290.70                 \\
+loose-equal-1-15x10 & \textbf{875.74}  & 1008.28         & 977.43          & 906.49          & 897.51          & 913.26               & 898.99              & 938.80                \\
+loose-equal-2-15x10 & 1587.09         & 1720.18         & 1584.44         & \textbf{1487.33} & 1538.27         & 1492.11              & 1554.18             & 1594.60                \\
+loose-tard-1-15x2   & \textbf{654.84}  & \textbf{654.84}  & \textbf{654.84}  & \textbf{654.84}  & \textbf{654.84}  & \textbf{654.84}  & \textbf{654.84}     & \textbf{654.84}   \\
+loose-tard-2-15x2   & 293.17          & \textbf{279.71}  & 297.54          & 285.16          & 289.36          & \textbf{279.71}      & \textbf{279.71}     & 290.88           \\
+loose-tard-1-15x5   & 1281.87         & 1320.93         & 1315.47         & 1281    & 1292.28         & 1317.56                       & \textbf{1280.74}    & 1281.41          \\
+loose-tard-2-15x5   & 335.55          & 329.47          & 335.55          & 328.26  & 330.14          & 332.25                        & \textbf{327.60}     & 328.88           \\
+loose-tard-1-15x10  & \textbf{277}     & 297.19          & 296.6           & \textbf{277}     & \textbf{277}     & \textbf{277}       & 281.45              & 287.03              \\
+loose-tard-2-15x10  & 597.93  & 713.97          & 664.13          & 601.24          & 627.81          & 603.67                        & \textbf{587.24}     & \textbf{592.31}         \\
+tight-equal-1-15x2  & 3366.66         & \textbf{3344.54} & \textbf{3344.54} & \textbf{3344.54} & \textbf{3344.54} & \textbf{3344.54}  & \textbf{3344.54}    & \textbf{3344.54}   \\
+tight-equal-2-15x2  & \textbf{1479.76} & \textbf{1479.76} & \textbf{1479.76} & \textbf{1479.76} & \textbf{1479.76} & \textbf{1479.76} & \textbf{1479.76}    & \textbf{1479.76}   \\
+tight-equal-1-15x5  & 1412.71         & 1369.06         & 1345.21         & 1342.3          & 1343.08         & 1345.18               & \textbf{1318.68}    & \textbf{1318.68}   \\
+tight-equal-2-15x5  & 2782.17         & 2630.06         & 2709.13         & 2641.28         & \textbf{2563.16} & 2602.99               & 2626.67             & 2651.16           \\
+tight-equal-1-15x10 & 7167.59         & 7380.76         & 8120.43         & 6820.87         & 6811.54 & 7115.63                       & \textbf{6610.44}    & \textbf{6748.88}           \\
+tight-equal-2-15x10 & 5407.42         & 4893.44         & 4966.34         & 4760.48         & 4801.47         & 4757.06                & \textbf{4652.41}    & \textbf{4730.08}    \\
+tight-tard-1-15x2   & 806.92          & \textbf{790.5}   & 790.66          & \textbf{790.5}   & \textbf{790.5}   & \textbf{790.5}     & \textbf{790.5}      & \textbf{790.5}       \\
+tight-tard-2-15x2   & \textbf{905.37}  & \textbf{905.37}  & \textbf{905.37}  & \textbf{905.37}  & \textbf{905.37}  & \textbf{905.37}   & \textbf{905.37}     & \textbf{905.37}      \\
+tight-tard-1-15x5   & 1371.29         & 1371.37         & 1426.97         & 1359.18         & 1366.45         & \textbf{1341.69}       & 1358.21             & 1359.18            \\
+tight-tard-2-15x5   & 721.46          & 691.1           & 725.72          & 681.27          & 677.8           & 695.08                 & \textbf{677.57}     & 681.62     \\
+tight-tard-1-15x10  & 815.03          & 800.87          & 832.08          & 767.26  & 770.91          & 775.4                          & \textbf{757.83}     & 785.75        \\
+tight-tard-2-15x10  & 1267.53         & 1310.04         & 1452.9          & 1224.82         & 1243.52         & 1226.23                & \textbf{1170.94}    & \textbf{1172.30}     \\
+\hline
+\end{tabular}
+}
+\end{table}
