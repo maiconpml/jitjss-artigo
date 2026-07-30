@@ -4,13 +4,20 @@ Unlike top-down approaches that select among a few rigid, monolithic algorithm t
 Automated configurators then combine these low-level building blocks to assemble novel and hybrid metaheuristic architectures automatically \citep{de2018automatic}.
 We selected these algorithmic building blocks primarily from the existing JITJSS literature, while also incorporating effective strategies from related scheduling domains.
 
-To specify valid combinations of algorithmic components systematically, we formalize the design space using a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}.
-In our BNF grammar, every derivation from the start symbol produces a syntactically valid algorithm.
-Non-terminal symbols represent design decisions, such as initial solution generation, local search procedures, and neighborhood operators, while terminal symbols represent specific algorithmic operators or numerical parameters.
+To specify valid combinations of algorithmic components systematically, we formalize the design space using a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}, shown in Figure~\ref{fig:grammar}.
+In our BNF grammar, every derivation from the start symbol \texttt{<algorithm>} produces a syntactically valid algorithm.
+Non-terminal symbols represent design decisions, such as initial solution generation (\texttt{<initial\_sol>}), neighborhood selection (\texttt{<neighborhood>}), search procedures (\texttt{<search>}), and sequence schedulers (\texttt{<scheduler>}), while terminal symbols represent specific algorithmic operators or numerical parameters.
 
 Following the methodology proposed by \citet{mascia2013grammars} and \citet{mascia2014grammar}, we map non-terminal symbols directly to categorical, ordinal, or numerical parameters within an Automatic Algorithm Configuration (AAC) framework.
 Deriving a non-terminal symbol from another non-terminal symbol creates conditional parameter relationships within the configurator, ensuring that the tool evaluates parameters only when the corresponding algorithmic component is active.
 To accommodate recursive search structures, such as nested local searches or iterated metaheuristics, within a finite parameter space, we follow \citet{mascia2013grammars} by duplicating parameter blocks for each allowed recursion level $i$, making level $i+1$ parameters conditional on the recursive choice at level $i$.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=1\linewidth]{img/grammar.png}
+\caption{Context-free grammar in Backus-Naur Form (BNF) defining the JITJSS algorithmic design space.}
+\label{fig:grammar}
+\end{figure}
 
 \subsection{Initialization Rules }
 \label{subsec:initialization_rules}
