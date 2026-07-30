@@ -22,6 +22,12 @@ To accommodate recursive search structures, such as nested local searches or ite
 \subsection{Initialization Rules }
 \label{subsec:initialization_rules}
 
+Initial solution sequences are generated via the non-terminal symbol \texttt{<initial\_sol>}, which selects one of two constructive procedures combined with one priority dispatching rule (\texttt{<dispatch\_rule>}) among Earliest Due Date (\texttt{edd}), random selection (\texttt{random}), and the ALL+CR+SPT (\texttt{all\_cr\_spt}) rule proposed by \citet{wang2014variable}.
+The first constructive option is a standard dispatching procedure (\texttt{priority}) that iteratively selects the next operation to schedule directly from a candidate list by evaluating the chosen priority rule.
+
+The second option is the Giffler--Thompson (GT) method \citep{giffler1960algorithms}, which also employs a chosen dispatching rule, but performs internal filtering operations on the candidate list prior to rule evaluation to guarantee the generation of active schedules without unnecessary machine idle time.
+The GT algorithm is included as it serves as the standard constructive procedure across leading JITJSS studies \citep{ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement}.
+
 \subsection{Neighborhood Operators} 
 \label{subsec:neighborhood_operators}
 
