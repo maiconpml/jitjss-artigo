@@ -4,13 +4,13 @@ Unlike top-down approaches that select among a few rigid, monolithic algorithm t
 Automated configurators then combine these low-level building blocks to assemble novel and hybrid metaheuristic architectures automatically \citep{de2018automatic}.
 We selected these algorithmic building blocks primarily from the existing JITJSS literature, while also incorporating effective strategies from related scheduling domains.
 
-To specify valid combinations of algorithmic components systematically, we formalize the design space using a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}, shown in Figure~\ref{fig:grammar}.
-In our BNF grammar, every derivation from the start symbol \texttt{<algorithm>} produces a syntactically valid algorithm.
+To specify valid combinations of algorithmic components systematically, we formalize the design space using a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}.
+In our BNF grammar, shown in Figure~\ref{fig:grammar}, every derivation from the start symbol \texttt{<algorithm>} produces a syntactically valid algorithm.
 Non-terminal symbols represent design decisions, such as initial solution generation (\texttt{<initial\_sol>}), neighborhood selection (\texttt{<neighborhood>}), search procedures (\texttt{<search>}), and sequence schedulers (\texttt{<scheduler>}), while terminal symbols represent specific algorithmic operators or numerical parameters.
 
 Following the methodology proposed by \citet{mascia2013grammars} and \citet{mascia2014grammar}, we map non-terminal symbols directly to categorical, ordinal, or numerical parameters within an Automatic Algorithm Configuration (AAC) framework.
 Deriving a non-terminal symbol from another non-terminal symbol creates conditional parameter relationships within the configurator, ensuring that the tool evaluates parameters only when the corresponding algorithmic component is active.
-To accommodate recursive search structures, such as nested local searches or iterated metaheuristics, within a finite parameter space, we follow \citet{mascia2013grammars} by duplicating parameter blocks for each allowed recursion level $i$, making level $i+1$ parameters conditional on the recursive choice at level $i$.
+To accommodate recursive search structures, such as nested local searches or iterated metaheuristics, within a finite parameter space, we follow \citeauthor{mascia2013grammars} by duplicating parameter blocks for each allowed recursion level $i$, making level $i+1$ parameters conditional on the recursive choice at level $i$.
 
 \begin{figure}[t]
 \centering
@@ -30,6 +30,34 @@ The GT algorithm is included as it serves as the standard constructive procedure
 
 \subsection{Neighborhood Operators} 
 \label{subsec:neighborhood_operators}
+
+The non-terminal symbol \texttt{<neighborhood>} specifies the neighborhood structures available in the design space, while \texttt{<improvement>} determines the exploration mode (First Improvement \texttt{fi} or Best Improvement \texttt{bi}).
+To explore candidate operation sequences efficiently, our design space incorporates seven distinct neighborhood structures, categorized into four groups based on their search mechanics and domain specificity.
+
+The first group comprises classical, unfiltered neighborhood operators.
+The \texttt{swap\_adj} operator swaps two adjacent operations assigned to the same machine without applying filtering rules \citep{dos2010combination}.
+The \texttt{swap\_rand} operator randomly selects two operations assigned to the same machine and swaps their processing order \citep{ahmadian2021meta}.
+The \texttt{insert\_rand} operator randomly selects an operation and relocates it to another position on the same machine \citep{ahmadian2021meta}.
+
+The second group includes penalty-driven heuristic operators based on the structural properties established by \citet{wang2014variable}.
+These operators leverage two key properties: (i) if an early operation lacks an adjacent machine successor ($MS[u]$), its immediate job successor ($JS[u]$) is guaranteed to be early; and (ii) if a tardy operation lacks an adjacent machine predecessor ($MP[u]$), its immediate job predecessor ($JP[u]$) is guaranteed to be tardy.
+Exploiting these properties, the \texttt{swap\_penal} operator targets a penalized operation $u$; if $u$ lacks adjacent machine neighbors ($MP[u]$ or $MS[u]$), the operator traces its job successors $JS[u]$ (for early operations) or job predecessors $JP[u]$ (for tardy operations) until locating a job relative with an adjacent machine neighbor, swapping them to eliminate penalty accumulation.
+
+The \texttt{insert\_penal} operator shifts penalized operations relative to their machine blocks (maximal sequences of adjacent operations without idle time).
+For an early operation $u$, \texttt{insert\_penal} attempts to relocate $u$ to the end of its machine block $B$, provided that the start time of the block's final operation does not exceed the start time of $u$'s job successor, $S_{JS[u]}$.
+For a tardy operation $u$, \texttt{insert\_penal} attempts to relocate $u$ to the beginning of its machine block $B$, provided that the completion time of the block's first operation is at least the completion time of $u$'s job predecessor, $C_{JP[u]}$, thereby exploiting idle times between blocks while controlling move locality.
+
+The third group introduces our novel problem-specific operator, named \texttt{swap\_crit} (critical swap).
+In preliminary experiments, we observed that tardiness penalties dominate total schedule costs in JITJSS.
+Driven by this empirical finding, we designed \texttt{swap\_crit} to focus exclusively on tardy operations.
+In classical job shop scheduling, reducing the completion time of a target operation requires modifying its underlying critical path; the classic N5 neighborhood of \citet{nowicki1996fast} achieves this by swapping operations at the boundaries of critical blocks for makespan minimization.
+We adapt the N5 critical block structure to JITJSS by applying the critical path concept individually to each tardy operation.
+For a given tardy operation $u$, \texttt{swap\_crit} constructs a backward critical path by recursively tracing the predecessor operation, either job predecessor $JP[u]$ or machine predecessor $MP[u]$, that exhibits the maximum completion time and directly delays $u$.
+Once the algorithm builds this individual critical path, it generates neighbor solutions by swapping the first two and last two operations of each critical block along the path, directly targeting the bottleneck operations that cause tardiness.
+
+The fourth group consists of a hybrid exact relaxation operator, named \texttt{relax} \citep{ahmadian2021meta}.
+The \texttt{relax} operator selects two machines randomly and relaxes the processing order of their assigned operations while holding the rest of the schedule fixed, invoking the CPLEX solver with a 1-second time limit to compute optimal local permutations.
+Because the CPLEX solver directly optimizes the sub-problem internally and returns a single optimal permutation, the \texttt{relax} operator bypasses standard neighborhood exploration modes (\texttt{<improvement>}), rendering First Improvement (\texttt{fi}) and Best Improvement (\texttt{bi}) choices inapplicable to this operator.
 
 \subsection{Search procedures}
 \label{subsec:search_procedures}
