@@ -19,7 +19,7 @@ To accommodate recursive search structures, such as nested local searches or ite
 \label{fig:grammar}
 \end{figure}
 
-\subsection{Initialization Rules }
+\subsection{Initialization Rules}
 \label{subsec:initialization_rules}
 
 Initial solution sequences are generated via the non-terminal symbol \texttt{<initial\_sol>}, which selects one of two constructive procedures combined with one priority dispatching rule (\texttt{<dispatch\_rule>}) among Earliest Due Date (\texttt{edd}), random selection (\texttt{random}), and the ALL+CR+SPT (\texttt{all\_cr\_spt}) rule proposed by \citet{wang2014variable}.
@@ -62,8 +62,37 @@ Because the CPLEX solver directly optimizes the sub-problem internally and retur
 \subsection{Search procedures}
 \label{subsec:search_procedures}
 
-\subsection{Perturbation Mechanisms }
-\label{subsec:perturbation}
+The non-terminal symbol \texttt{<search>} selects the high-level metaheuristic search framework: Local Search (\texttt{ls}), Tabu Search (\texttt{tabu}), or Iterated Local Search (\texttt{ils}).
+Local Search represents a fundamental single-solution search procedure that iteratively explores the solution space using a selected neighborhood structure.
+Starting from an initial sequence, the LS procedure evaluates neighbor solutions according to the configured exploration mode and transitions to improving solutions until reaching a local optimum, terminating when no strictly better neighbor exists in the neighborhood.
+
+While standard local search terminates upon encountering its first local optimum, tabu search extends this local exploration to escape local optima by incorporating flexible memory structures and dedicated mechanisms to prevent cyclic behavior \citep{zubaran2016tabu}.
+The tabu memory records the disjunctive graph arcs broken by recent moves, prohibiting their reversal during a configurable \emph{tabu tenure} (\texttt{tenure}).
+For operation swap moves, the algorithm marks the incoming arcs of the swapped operations as tabu, whereas for insert moves, it marks the incoming arc of the relocated operation.
+During neighborhood exploration, TS selects candidate moves according to a strict priority hierarchy: (i) the best move that satisfies the aspiration criterion by improving upon the global best solution found so far; (ii) the best non-tabu move; or (iii) the oldest tabu move if all candidate moves are tabu.
+When selecting an expired tabu move, the algorithm advances its internal clock to purge all older entries automatically.
+
+To maintain search diversification and recover from stagnation, TS incorporates an elite solution list $E$ of size $L$ (\texttt{elite\_list\_size}) alongside a non-improvement iteration counter \citep{zubaran2016tabu}.
+The elite list $E$ stores solutions that achieve a global objective improvement, retaining their full search states, including unexplored neighborhood branches and the active tabu memory configuration at the time of discovery.
+If the search executes a maximum allowed number of consecutive non-improving iterations (\texttt{limit\_iters}), TS initiates a backjump operation to resume exploration from the elite list.
+
+In addition to monitoring non-improving iterations, TS employs a dedicated cycle detector to prevent search trajectory cycling \citep{zubaran2016tabu}.
+The cycle detector monitors the sequence of objective values across the last $d$ (\texttt{max\_d}) visited solutions.
+If this exact sequence of $d$ objective values repeats in the same order $c$ (\texttt{max\_c}) consecutive times, the detector identifies trajectory cycling and forces an immediate backjump operation.
+
+Upon executing a backjump, the algorithm restores the search state of the most recent elite solution in $E$, reloading its tabu memory state while excluding previously explored neighbor moves from that solution.
+Furthermore, each time a backjump occurs, the algorithm dynamically reduces the current non-improvement iteration limit by $\frac{100}{x}\%$, where $x$ represents the non-terminal symbol \texttt{<decrease\_divisor>}.
+When all neighborhood branches of the current elite solution are exhausted, TS purges it from $E$ and cascades the backjump to the penultimate elite solution.
+Finally, if a backjump is triggered while the elite list $E$ is empty, the Tabu Search procedure terminates.
+
+Iterated Local Search acts as a high-level algorithmic container that repeatedly perturbs the incumbent solution, applies an inner search procedure (LS or TS) to reach a new local optimum, and evaluates the candidate solution using an acceptance criterion \citep{talbi}.
+To escape attraction basins during search stagnation, ILS incorporates a dedicated perturbation mechanism based on the state-of-the-art strategy of \citet{ahmadian2021meta}.
+This perturbation selects two machines randomly, relaxes the disjunctive precedence constraints across all operations assigned to those two machines, and calls the CPLEX solver with a 1-second time limit to re-sequence them, disrupting the current schedule structure to produce a fresh starting point for the subsequent inner search loop.
+Specifically, our acceptance criterion adopts a strictly improving rule, accepting a candidate solution if and only if it improves upon the all-time global best solution found so far.
+
+Furthermore, when configured with an ordered sequence of distinct neighborhood structures ($N_1, N_2, \ldots, N_k$), the algorithm advances to the next neighborhood structure whenever an iteration fails to yield a global improvement.
+Upon reaching the end of the neighborhood list ($N_k$), ILS loops cyclically back to the first neighborhood ($N_1$) to resume exploration.
+Through this multi-neighborhood cyclic progression, the ILS framework functionally encapsulates Variable Neighborhood Search (VNS) dynamics \citep{talbi}, allowing our design space to synthesize pure ILS or VNS metaheuristics dynamically within a unified grammar structure.
 
 \subsection{Exact Timing Sub-Solvers}
 \label{subsec:exact_subsolvers}
