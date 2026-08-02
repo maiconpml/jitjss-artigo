@@ -94,5 +94,17 @@ Furthermore, when configured with an ordered sequence of distinct neighborhood s
 Upon reaching the end of the neighborhood list ($N_k$), ILS loops cyclically back to the first neighborhood ($N_1$) to resume exploration.
 Through this multi-neighborhood cyclic progression, the ILS framework functionally encapsulates Variable Neighborhood Search (VNS) dynamics \citep{talbi}, allowing our design space to synthesize pure ILS or VNS metaheuristics dynamically within a unified grammar structure.
 
-\subsection{Exact Timing Sub-Solvers}
+\subsection{Schedulers}
 \label{subsec:exact_subsolvers}
+
+To evaluate candidate operation sequences $\pi$, our design space incorporates two distinct sequence timing sub-solvers under the non-terminal symbol \texttt{<scheduler>}.
+Given a fixed directed acyclic graph $G(\pi)$, these schedulers compute operation completion times $C_{ik}$ and determine total weighted earliness and tardiness penalties $z$.
+
+The first option, \texttt{cplex}, formulates the exact timing sub-problem for sequence $\pi$ as a Linear Program (LP) and solves it using the CPLEX solver.
+By optimizing completion times $C_{ik}^*$ directly against penalty weights $\alpha_{ik}$ and $\beta_{ik}$, \texttt{cplex} computes the minimum achievable cost for the fixed sequence $\pi$.
+To mitigate the high computational overhead of invoking an external solver iteratively during search, \texttt{cplex} operates under a strict 1-second time limit per sequence evaluation, returning the best feasible schedule found if the time budget expires.
+
+The second option, \texttt{linear}, is a fast, linear-time heuristic scheduler that combines early scheduling with a deliberate right-shifting mechanism.
+Initially, \texttt{linear} schedules operations as early as possible along the acyclic graph $G(\pi)$ in linear time with respect to the total number of operations.
+To mitigate unnecessary earliness penalties, the algorithm then performs a backward pass that deliberately delays early operations into available machine idle time slots.
+The algorithm restricts these right-shifting delays exclusively to movements that do not compromise on-time or tardy operations, guaranteeing non-increasing objective values.
