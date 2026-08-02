@@ -11,7 +11,7 @@ In JITJSS, each job consists of operations with specific target due dates, and t
 
 JITJSS is a strongly NP-hard problem \citep{du1990minimizing}.
 Consequently, extensive research has focused on metaheuristic algorithms, including genetic algorithms \citep{araujo2009genetic, dos2010combination, yang2012improved}, variable neighborhood search \citep{wang2014variable, ahmadian2021meta}, adaptive large neighborhood search \citep{laborie2007self, abderrazzak2022adaptive}, and deep reinforcement learning \citep{sabri2023reinforcement}.
-Among these, the work by \citeauthor{ahmadian2021meta} remains the most comprehensive benchmark because it is the latest study to evaluate all instance scales, including large instances.
+Among these, the work by \citeauthor{ahmadian2021meta} remains the most comprehensive benchmark because it is the latest study to evaluate all instance scales.
 Although recent studies \citep{abderrazzak2022adaptive, sabri2023reinforcement} report minor improvements on small and medium instances, they omit evaluations on large instances.
 Therefore, the current state of the art represents a synthesis of these contributions, with \citeauthor{ahmadian2021meta} serving as the primary baseline across all problem sizes.
 
@@ -29,7 +29,7 @@ The main contributions of this paper are fourfold:
 \begin{enumerate}[(i)]
     \item We formalize an algorithmic design space for JITJSS using a context-free grammar that integrates diverse search strategies, neighborhood operators, perturbation schemes, and exact mathematical solvers.
     \item We introduce a novel domain-specific neighborhood operator, named \texttt{swap\_crit} (critical swap), tailored specifically to the structural characteristics of JITJSS.
-    \item We employ \texttt{irace} to explore the proposed design space, automatically generating an Iterated Tabu Search (ITS) algorithm where \texttt{irace} selected our \texttt{swap\_crit} operator in 80\% of the top-performing configurations.
+    \item We employ \texttt{irace} to explore the proposed design space, automatically generating an Iterated Tabu Search (ITS) algorithm.
     \item We extensively evaluate the automatically designed algorithm on 72 standard benchmark instances \citep{baptiste2008lagrangian}. The generated algorithm matched or improved upon current state-of-the-art results in 72.2\% of the instances, requiring an average execution time of only 21.1 seconds.
 \end{enumerate}
 
