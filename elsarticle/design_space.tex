@@ -56,7 +56,7 @@ For a given tardy operation $u$, \texttt{swap\_crit} constructs a backward criti
 Once the algorithm builds this individual critical path, it generates neighbor solutions by swapping the first two and last two operations of each critical block along the path, directly targeting the bottleneck operations that cause tardiness.
 
 The fourth group consists of a hybrid exact relaxation operator, named \texttt{relax} \citep{ahmadian2021meta}.
-The \texttt{relax} operator selects two machines randomly and relaxes the processing order of their assigned operations while holding the rest of the schedule fixed, invoking the CPLEX solver with a 1-second time limit to compute optimal local permutations.
+During local search, the \texttt{relax} operator relaxes the processing sequence of a sub-sequence of operations while holding the remainder of the schedule fixed, invoking the CPLEX solver with a 1-second time limit to re-optimize their ordering for direct objective improvement.
 Because the CPLEX solver directly optimizes the sub-problem internally and returns a single optimal permutation, the \texttt{relax} operator bypasses standard neighborhood exploration modes (\texttt{<improvement>}), rendering First Improvement (\texttt{fi}) and Best Improvement (\texttt{bi}) choices inapplicable to this operator.
 
 \subsection{Search procedures}
