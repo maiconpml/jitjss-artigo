@@ -43,7 +43,10 @@ A solution sequence $\pi$ specifies a processing order for each machine, which c
 This complete selection yields a fully directed graph $G(\pi) = (V, X \cup Y(\pi))$, where any directed path between two operations indicates an enforced temporal precedence constraint.
 A sequence $\pi$ represents a physically feasible schedule if and only if the directed graph $G(\pi)$ contains no directed cycles, as a cycle would imply a deadlocked precedence loop where an operation must precede itself \citep{pinedo2016}.
 
+Furthermore, for any operation $u$, we denote by $JP[u]$ and $JS[u]$ its immediate job predecessor and immediate job successor, respectively.
+Similarly, for a given machine sequence $\pi$, $MP[u]$ and $MS[u]$ denote the immediate machine predecessor and immediate machine successor of operation $u$ on its assigned machine $M(u)$.
+
 In traditional makespan minimization, setting operation start times as early as possible on a given acyclic graph $G(\pi)$ yields an optimal schedule, which researchers compute efficiently in $O(|V| + |X|)$ time via critical path calculation.
 In contrast, JITJSS penalizes early completions, meaning that scheduling operations as early as possible is generally non-optimal.
 For a fixed feasible operation sequence $\pi$, determining the optimal completion times $C_{ik}$ requires solving a timing sub-problem to balance earliness and tardiness penalties.
-Metaheuristic methods for JITJSS typically decompose the solution process into two stages: exploring the space of operation sequences $\pi$ via local search or metaheuristics, and solving the timing sub-problem for each sequence using mathematical programming or linear programming sub-solvers \citep{dos2010combination, wang2014variable, ahmadian2021meta}.
+Metaheuristic methods for JITJSS typically decompose the solution process into two stages: exploring the space of operation sequences $\pi$ via local search or metaheuristics, and solving the timing sub-problem for each sequence using mathematical programming \citep{dos2010combination, wang2014variable, ahmadian2021meta}.
