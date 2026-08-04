@@ -27,10 +27,10 @@ This paper addresses this research gap by investigating whether automated algori
 
 The main contributions of this paper are fourfold:
 \begin{enumerate}[(i)]
-    \item We formalize an algorithmic design space for JITJSS using a context-free grammar that integrates diverse search strategies, neighborhood operators, perturbation schemes, and exact mathematical solvers.
-    \item We introduce a novel domain-specific neighborhood operator, named \texttt{swap\_crit} (critical swap), tailored specifically to the structural characteristics of JITJSS.
+    \item We formalize an algorithmic design space for JITJSS using a context-free grammar that integrates diverse search strategies, neighborhood operators, and exact mathematical solvers.
+    \item We introduce a novel domain-specific neighborhood operator, named \texttt{swap\_crit}, tailored specifically to the structural characteristics of JITJSS.
     \item We employ \texttt{irace} to explore the proposed design space, automatically generating an Iterated Tabu Search (ITS) algorithm.
-    \item We extensively evaluate the automatically designed algorithm on 72 standard benchmark instances \citep{baptiste2008lagrangian}. The generated algorithm matched or improved upon current state-of-the-art results in 72.2\% of the instances, requiring an average execution time of only 21.1 seconds.
+    \item We evaluate the automatically designed algorithm on 72 standard benchmark instances \citep{baptiste2008lagrangian}. The generated algorithm matched or improved upon current state-of-the-art results in 72.2\% of the instances, requiring an average execution time of only 21.1 seconds.
 \end{enumerate}
 
 The remainder of this paper is organized as follows: Section~\ref{subsec:prob} describes the JITJSS problem formulation while Section~\ref{subsec:litrev} reviews the literature on JITJSS.
