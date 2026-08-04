@@ -56,6 +56,13 @@ where $n$ represents the total number of design space parameters, $\delta_{ij}^{
 For categorical parameters, $s_{ij}^{(k)} = 0$ if values match ($x_{ik} = x_{jk}$) and $1$ otherwise.
 For numerical parameters, $s_{ij}^{(k)} = \frac{|x_{ik} - x_{jk}|}{R_k}$, normalized by the parameter search range $R_k$.
 
+\begin{figure}[htb] 
+    \centering 
+    \includegraphics[width=0.85\linewidth]{img/config_convergence.pdf}
+    \caption{Evolution of average pairwise Gower and Jaccard distances among elite configurations across \texttt{irace} iterations.}
+    \label{fig:grafico_variancia}
+\end{figure}
+
 Because Gower's distance evaluates parameter positions independently, it can overestimate dissimilarity when two configurations select identical neighborhood sets in different permutation orders.
 Due to the cyclic progression of our VNS container, different permutations of the same neighborhood set exhibit functionally equivalent search behavior.
 To complement Gower's metric, we compute the Jaccard Distance Index \citep{jaccard1901etude} over active neighborhood sets $U$ and $V$, evaluating set-level dissimilarity independently of derivation order according to Equation~\eqref{eq:jaccard}:
@@ -64,12 +71,6 @@ To complement Gower's metric, we compute the Jaccard Distance Index \citep{jacca
     Jaccard(U,V) = 1 - \frac{|U \cap V|}{|U \cup V|}
 \end{equation}
 
-\begin{figure}[t] 
-    \centering 
-    \includegraphics[width=0.85\linewidth]{img/config_convergence.pdf}
-    \caption{Evolution of average pairwise Gower and Jaccard distances among elite configurations across \texttt{irace} iterations.}
-    \label{fig:grafico_variancia}
-\end{figure}
 
 Figure~\ref{fig:grafico_variancia} tracks the average pairwise Gower and Jaccard distances across all 11 \texttt{irace} configuration iterations.
 Both distance metrics exhibit a sharp, monotonic reduction during initial iterations followed by clear stabilization throughout the second half of the configuration process.
@@ -82,10 +83,10 @@ To evaluate the generalization capacity and solution quality of the derived algo
 In our performance analysis, each configuration is evaluated against the best-known solution value for each instance, defined as the minimum objective value obtained across the combination of all five state-of-the-art literature methods: \citet{dos2010combination}, \citet{wang2014variable}, \citet{ahmadian2021meta}, \citet{abderrazzak2022adaptive}, and \citet{sabri2023reinforcement}.
 Because the algorithms incorporate stochastic search components, each configuration was executed 5 times per instance using 5 distinct random seeds.
 
+\input{table_results_confs.tex}
+
 Table~\ref{tab:results_confs} summarizes the comparative performance of the five elite configurations across the test set.
 For each configuration, the table reports: (i) the number of instances where the best solution ($B$) achieved across 5 runs matched or improved upon the best-known literature benchmark; and (ii) the number of instances where the median solution ($M$) across 5 runs matched or improved upon the literature benchmark.
-
-\input{table_results_confs.tex}
 
 As shown in Table~\ref{tab:results_confs}, configuration $C_1$ demonstrated superior generalization performance on unseen test instances, attaining the highest number of top-performing solutions.
 Because $C_1$ achieved the best overall performance among all elite configurations, we selected $C_1$ as our primary algorithm representative for detailed instance-by-instance comparison against the state of the art.
