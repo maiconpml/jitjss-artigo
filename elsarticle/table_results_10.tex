@@ -1,37 +1,37 @@
 \begin{table}[ht]
 \centering
-\caption{Computational results of configuration C1 for instances with 10 jobs.}
-\label{tab:results_10}
-\resizebox{\textwidth}{!}{
+\resizebox{0.985\textwidth}{!}{
 \begin{tabular}{lcccccccc}
 \hline
-\textbf{Instance}                & \textbf{Cplex}           & \textbf{[1]}          & \textbf{[2]}            & \textbf{[3]}        & \textbf{[4]}       & \textbf{[5]}        & \textbf{$B$} & \textbf{$M$}  \\
+\textbf{Instance}                & \textbf{Cplex}           & \textbf{D}          & \textbf{W}            & \textbf{A}        & \textbf{AB}       & \textbf{S}        & \textbf{$B$} & \textbf{$M$}  \\
 \hline
-loose-equal-1-10x2  & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84}    & \textbf{224.84}       & \textbf{224.84}         \\
-loose-equal-2-10x2  & \textbf{319.37} & 324.43          & \textbf{319.37} & \textbf{319.37} & \textbf{319.37} & \textbf{319.37}    & \textbf{319.37}       & \textbf{319.37}         \\
-loose-equal-1-10x5  & 1738.05         & 1733.38         & 1738.05         & \textbf{1719.63} & 1725.16         & \textbf{1719.63}  & \textbf{1719.63}      & 1738.63                \\
-loose-equal-2-10x5  & 971.96          & 968.89          & \textbf{967.73} & \textbf{967.73} & 968.05          & \textbf{967.73}    & \textbf{967.63}       & \textbf{967.73}                  \\
-loose-equal-1-10x10 & 360.74          & 366.77          & 365.81          & 364.39          & 360.56          & \textbf{360.33}    & 360.74                & 364.59                  \\
-loose-equal-2-10x10 & 251.86          & \textbf{249.85} & 252.99          & \textbf{249.85} & \textbf{249.85} & \textbf{249.85}    & \textbf{249.85}       & \textbf{249.85}         \\
-loose-tard-1-10x2   & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44}    & \textbf{416.44}       & \textbf{416.44}         \\
-loose-tard-2-10x2   & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94}    & \textbf{137.94}       & \textbf{137.94}         \\
-loose-tard-1-10x5   & 176.83          & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} & \textbf{175.08}    & \textbf{175.08}       & \textbf{175.08}                  \\
-loose-tard-2-10x5   & 492.05          & 525.88          & 499.93          & \textbf{485.06} & 488.6           & 486.93             & \textbf{485.06}       & \textbf{485.06}         \\
-loose-tard-1-10x10  & 375.71          & 383.84          & 380.26          & \textbf{374.2}  & \textbf{374.2}  & 375.58             & \textbf{374.2}        & 386.4                  \\
-loose-tard-2-10x10  & \textbf{144.94} & \textbf{144.94} & 144.99          & \textbf{144.94} & \textbf{144.94} & \textbf{144.94}    & \textbf{144.94}       & \textbf{144.94}         \\
-tight-equal-1-10x2  & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96}    & \textbf{461.96}       & \textbf{461.96}         \\
-tight-equal-2-10x2  & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32}    & \textbf{448.32}       & \textbf{448.32}         \\
-tight-equal-1-10x5  & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11}    & \textbf{689.11}       & 690.29                  \\
-tight-equal-2-10x5  & \textbf{763.24} & 770.49          & 764.03          & \textbf{763.24} & \textbf{763.24} & \textbf{763.24}    & \textbf{763.24}       & \textbf{763.24}         \\
-tight-equal-1-10x10 & 1281.66         & \textbf{1276.23} & 1277.44         & \textbf{1276.23} & \textbf{1276.23} & 1279.82         & 1281.66      & 1301.46                 \\
-tight-equal-2-10x10 & 1885.25         & 1885.25         & 1871.23         & 1866.92         & 1865.94 & 1886.93                    & \textbf{1865.93}      & 1873.64                 \\
-tight-tard-1-10x2   & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46}    & \textbf{179.46}       & \textbf{179.46}         \\
-tight-tard-2-10x2   & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37}    & \textbf{145.37}       & \textbf{145.37}         \\
-tight-tard-1-10x5   & \textbf{379.19} & 380.82          & 380             & \textbf{379.19} & \textbf{379.19} & \textbf{379.19}    & 386.57                & 389.43                  \\
-tight-tard-2-10x5   & 635.93          & \textbf{627.45} & 628.68          & \textbf{627.45} & 628.02          & \textbf{627.45}    & \textbf{627.45}       & \textbf{627.45}         \\
-tight-tard-1-10x10  & 687.65          & 717.85          & 746.03          & 668.14          & \textbf{667.97} & 669.15             & 669.93                & 687.65                  \\
-tight-tard-2-10x10  & 779.17          & 780.82          & 785.79          & \textbf{777.85} & 778.32          & 780.74             & 780.66                & 804.23                  \\
+loose-equal-1-10x2 & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} & \textbf{224.84} \\
+loose-equal-2-10x2 & \textbf{319.37} & 324.43 & \textbf{319.37} & \textbf{319.37} & \textbf{319.37} & \textbf{319.37} & \textbf{319.37} & \textbf{319.37} \\
+loose-equal-1-10x5 & 1738.05 & 1733.38 & 1738.05 & \textbf{1719.63} & 1725.16 & \textbf{1719.63} & \textbf{1719.63} & 1738.05 \\
+loose-equal-2-10x5 & 971.96 & 968.89 & \textbf{967.73} & \textbf{967.73} & 968.05 & \textbf{967.73} & \textbf{967.73} & \textbf{967.73} \\
+loose-equal-1-10x10 & 360.74 & 366.77 & 365.81 & 364.39 & 360.56 & \textbf{360.33} & 360.74 & 365.40 \\
+loose-equal-2-10x10 & 251.86 & \textbf{249.85} & 252.99 & \textbf{249.85} & \textbf{249.85} & \textbf{249.85} & \textbf{249.85} & \textbf{249.85} \\
+loose-tard-1-10x2 & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} & \textbf{416.44} \\
+loose-tard-2-10x2 & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} & \textbf{137.94} \\
+loose-tard-1-10x5 & 176.83 & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} & \textbf{175.08} \\
+loose-tard-2-10x5 & 492.05 & 525.88 & 499.93 & \textbf{485.06} & 488.6 & 486.93 & \textbf{485.06} & \textbf{485.06} \\
+loose-tard-1-10x10 & 375.71 & 383.84 & 380.26 & \textbf{374.2} & \textbf{374.2} & 375.58 & 381.30 & 386.40 \\
+loose-tard-2-10x10 & \textbf{144.94} & \textbf{144.94} & 144.99 & \textbf{144.94} & \textbf{144.94} & \textbf{144.94} & \textbf{144.94} & \textbf{144.94} \\
+tight-equal-1-10x2 & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} & \textbf{461.96} \\
+tight-equal-2-10x2 & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} & \textbf{448.32} \\
+tight-equal-1-10x5 & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & \textbf{689.11} & 690.29 \\
+tight-equal-2-10x5 & \textbf{763.24} & 770.49 & 764.03 & \textbf{763.24} & \textbf{763.24} & \textbf{763.24} & \textbf{763.24} & \textbf{763.24} \\
+tight-equal-1-10x10 & 1281.66 & \textbf{1276.23} & 1277.44 & \textbf{1276.23} & \textbf{1276.23} & 1279.82 & 1281.66 & 1301.46 \\
+tight-equal-2-10x10 & 1885.25 & 1885.25 & 1871.23 & 1866.92 & \textbf{1865.94} & 1886.93 & 1872.54 & 1874.57 \\
+tight-tard-1-10x2 & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} & \textbf{179.46} \\
+tight-tard-2-10x2 & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} & \textbf{145.37} \\
+tight-tard-1-10x5 & \textbf{379.19} & 380.82 & 380 & \textbf{379.19} & \textbf{379.19} & \textbf{379.19} & 386.57 & 389.43 \\
+tight-tard-2-10x5 & 635.93 & \textbf{627.45} & 628.68 & \textbf{627.45} & 628.02 & \textbf{627.45} & \textbf{627.45} & 627.64 \\
+tight-tard-1-10x10 & 687.65 & 717.85 & 746.03 & 668.14 & \textbf{667.97} & 669.15 & 669.93 & 687.86 \\
+tight-tard-2-10x10 & 779.17 & 780.82 & 785.79 & \textbf{777.85} & 778.32 & 780.74 & 783.70 & 804.23 \\
 \hline
 \end{tabular}
 }
+\caption{Computational results of configuration C1 for instances with 10 jobs. Literature sources: D (\citet{dos2010combination}), W (\citet{wang2014variable}), Cplex and A (\citet{ahmadian2021meta}), AB (\citet{abderrazzak2022adaptive}), and S (\citet{sabri2023reinforcement}).}
+\label{tab:results_10}
 \end{table}

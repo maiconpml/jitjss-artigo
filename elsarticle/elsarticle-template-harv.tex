@@ -43,6 +43,7 @@
 \usepackage{microtype}
 % User included:
 \usepackage{lmodern}
+\usepackage{placeins}
 %% The amsthm package provides extended theorem environments
 %% \usepackage{amsthm}
 
@@ -76,18 +77,19 @@
 
 %% Abstract
 \begin{abstract}
-The Just-In-Time Job Shop Scheduling problem is a complex scheduling optimization problem where operations possess specific due dates, and completing them outside these deadlines generates earliness or tardiness penalties.
-The objective is to minimize the total weighted sum of these penalties.
-In this work, we propose a new algorithmic design space parameterized via a context-free grammar in Backus-Naur Form to generate novel metaheuristics for JITJSS automatically.
-The configuration process converged to an architecture based on Iterated Tabu Search, validating the relevance of our novel critical-path neighborhood which was selected in 80\% of the elite configurations.
-In experimental tests conducted on the literature benchmark instances, the automatically generated algorithm matched or surpassed the best-known values in 72.2\% of the scenarios.
-Furthermore, the method demonstrated high temporal efficiency, locating final solutions in an average of 21.1 seconds.
-These results validate the effectiveness of the constructed algorithmic components and endorse Automatic Algorithm Design as a robust alternative to manual heuristic tuning for complex scheduling problems.
+The Just-In-Time Job Shop Scheduling (JITJSS) problem is a challenging combinatorial optimization problem where operation completions outside specific due dates incur earliness or tardiness penalties.
+The objective is to minimize the total weighted sum of these penalties across all operations.
+Because tardiness penalties dominate total schedule costs, we propose a novel domain-specific neighborhood operator, \texttt{swap\_crit}, which traces individual backward critical paths of tardy operations to swap bottleneck operations at critical block boundaries.
+To validate the effectiveness of the proposed operator without designer bias, we embed \texttt{swap\_crit} within an algorithmic design space parameterized via a context-free grammar in Backus-Naur Form, coupling it with alternative literature heuristics, metaheuristic frameworks, and exact sequence timing sub-solvers.
+Using the \texttt{irace} configurator as an objective validation testbed on a dedicated training set, the automated design process converged to an Iterated Tabu Search architecture that decisively selected \texttt{swap\_crit} in 80\% of the elite configurations.
+In computational experiments on the standard 72 literature benchmark instances, the resulting algorithm matched or improved upon state-of-the-art results across 72.2\% of the scenarios.
+Pairwise Wilcoxon signed-rank tests confirm statistically significant improvements over established baselines ($p < 0.05$), with our collective search establishing 25 new best-known solutions.
+These results demonstrate that the proposed critical-path operator addresses key structural bottlenecks in JITJSS and establish Automatic Algorithm Design as a powerful methodology for validating novel algorithmic components.
 \end{abstract}
 
 %% Keywords
 \begin{keyword}
-Automatic Algorithm Design \sep Automatic Algorithm Configuration \sep Scheduling Problems \sep Heuristics \sep Just-In-Time Job Shop
+Just-In-Time Job Shop \sep Neighborhood Operators \sep Critical Path \sep Tabu Search \sep Automatic Algorithm Design
 \end{keyword}
 
 \end{frontmatter}
@@ -95,30 +97,35 @@ Automatic Algorithm Design \sep Automatic Algorithm Configuration \sep Schedulin
 %% main text
 \input{introduction.tex}
 
-%% Use \subsection commands to start a subsection.
-\subsection{Problem definition}
+\subsection{Problem Definition}
 \label{subsec:prob}
-
 \input{problem_description.tex}
 
-\subsection{Literature Review}
+\subsection{Related Literature on JITJSS}
 \label{subsec:litrev}
 \input{literature_review.tex}
 
-\section{Algorithmic Design Space}
+\section{Proposed Neighborhood Operator}
+\label{sec:swap_crit}
+
+\input{proposed_operator.tex}
+
+\section{Algorithmic Design Space for Automated Validation}
 \label{sec:design_space}
 \input{design_space.tex}
 
-\section{Automatic configuration}
+\section{Automatic Configuration}
 \label{sec:config_process}
 \input{automatic_configuration.tex}
 
-\section{Computational results}
+\section{Computational Results}
 \label{sec:results}
 \input{results.tex}
 
 \section{Conclusions}
 \label{sec:conclu}
+
+\input{conclusion.tex}
 %% Use \subsubsection, \paragraph, \subparagraph commands to 
 %% start 3rd, 4th and 5th level sections.
 %% Refer following link for more details.
@@ -200,11 +207,18 @@ Automatic Algorithm Design \sep Automatic Algorithm Configuration \sep Schedulin
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
-% \appendix
-% \section{Example Appendix Section}
-% \label{app1}
-%
-% Appendix text.
+\FloatBarrier
+\appendix
+\section{Detailed Instance-by-Instance Benchmark Results}
+\label{app:detailed_results}
+
+This appendix reports the complete instance-by-instance numerical evaluations across all 72 benchmark instances of \citet{baptiste2008lagrangian}.
+Tables~\ref{tab:results_10}, \ref{tab:results_15}, and \ref{tab:results_20} summarize results for small ($n = 10$), medium ($n = 15$), and large ($n = 20$) problem horizons, respectively, detailing the Best ($B$) and Median ($M$) objective values obtained by configuration $C_1$ over 5 independent stochastic runs alongside competing literature baselines.
+
+\input{table_results_10.tex}
+\input{table_results_15.tex}
+\input{table_results_20.tex}
+\FloatBarrier
 %
 % %% For citations use: 
 % %%       \citet{<label>} ==> Lamport (1994)

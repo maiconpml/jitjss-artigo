@@ -1,15 +1,10 @@
 The JITJSS problem, introduced by \citet{baptiste2008lagrangian}, considers a set of $n$ jobs $J = \{J_1, J_2, \ldots, J_n\}$ to be processed on a set of $m$ machines $M = \{M_1, M_2, \ldots, M_m\}$.
-Each job $J_i \in J$ consists of an ordered sequence of $m$ operations $O_i = \{o_{i1}, o_{i2}, \ldots, o_{im}\}$, where $o_{ik}$ represents the $k$-th operation of job $J_i$.
-Each operation $o_{ik}$ must execute on a specified machine $M(o_{ik}) \in M$ for an uninterrupted processing time $p_{ik} > 0$.
+Each job $J_i \in J$ consists of an ordered sequence of $m$ operations $O_i = (o_{i1}, o_{i2}, \ldots, o_{im})$, where $o_{ik}$ represents the $k$-th operation of job $J_i$.
+Each operation $o_{ik}$ requires an uninterrupted processing time $p_{ik} > 0$ on a dedicated machine $M(o_{ik}) \in M$.
 We denote by $\mathcal{O}(M_u) = \{o_{ik} \mid M(o_{ik}) = M_u\}$ the set of all operations requiring machine $M_u \in M$.
 
 Each operation $o_{ik}$ has a target due date $d_{ik} \ge 0$, an earliness penalty weight $\alpha_{ik} \ge 0$, and a tardiness penalty weight $\beta_{ik} \ge 0$.
-Let $C_{ik}$ denote the completion time of operation $o_{ik}$.
-The earliness $E_{ik}$ and tardiness $T_{ik}$ of operation $o_{ik}$ are defined as:
-\begin{align}
-E_{ik} &= \max(d_{ik} - C_{ik}, 0), \quad \forall J_i \in J, \, o_{ik} \in O_i, \label{eq:earliness_def} \\
-T_{ik} &= \max(C_{ik} - d_{ik}, 0), \quad \forall J_i \in J, \, o_{ik} \in O_i. \label{eq:tardiness_def}
-\end{align}
+Let $C_{ik}$ denote the completion time of operation $o_{ik}$. $E_{ik}$ and $T_{ik}$ represent the earliness and tardiness of operation $o_{ik}$.
 
 The objective of JITJSS is to determine a feasible schedule of operation completion times that minimizes the total weighted earliness and tardiness penalty $z$:
 \begin{equation}
@@ -26,27 +21,29 @@ subject to:
 \end{align}
 
 The objective function~\eqref{eq:obj} minimizes the total weighted penalty for both early and late operation completions.
-Constraint~\eqref{eq:non_negative_start} ensures that no operation starts before time zero.
-Constraint~\eqref{eq:job_precedence} enforces job precedence constraints, requiring that each operation $o_{ik}$ completes before its successor $o_{i,k+1}$ begins processing.
-Constraint~\eqref{eq:machine_disjunction} represents disjunctive machine constraints, preventing any machine $M_u$ from processing more than one operation simultaneously.
-Constraints~\eqref{eq:earliness_linear}--\eqref{eq:non_negativity} define the non-negative earliness and tardiness values for each operation.
+Constraints~\eqref{eq:non_negative_start} and \eqref{eq:job_precedence} set the non-negative start times and enforce precedence among consecutive operations of the same job.
+Machine capacity is preserved by the disjunctive constraints~\eqref{eq:machine_disjunction}, which prevent overlapping operations on any machine. 
+Finally, constraints~\eqref{eq:earliness_linear}--\eqref{eq:non_negativity} linearize the earliness and tardiness values.
+% Constraint~\eqref{eq:non_negative_start} ensures that no operation starts before time zero.
+% Constraint~\eqref{eq:job_precedence} enforces job precedence constraints, requiring that each operation $o_{ik}$ completes before its successor $o_{i,k+1}$ begins processing.
+% Constraint~\eqref{eq:machine_disjunction} represents disjunctive machine constraints, preventing any machine $M_u$ from processing more than one operation simultaneously.
+% Constraints~\eqref{eq:earliness_linear}--\eqref{eq:non_negativity} define the non-negative earliness and tardiness values for each operation.
 
 \subsection{Sequence Representation}
 \label{subsec:disjunctive_graph}
 
 Following standard job shop scheduling literature \citep{pinedo2016}, we represent machine processing orders using a disjunctive graph $G = (V, X, Y)$.
-The node set $V = \{s, t\} \cup \{o_{ik} \mid J_i \in J, k = 1, \ldots, m\}$ contains a dummy source node $s$, a dummy sink node $t$, and nodes representing all operations, with node weights equal to processing times $p_{ik}$.
-The directed arc set $X$ represents fixed job precedence constraints, containing directed arcs $(s, o_{i1})$, $(o_{im}, t)$, and $(o_{ik}, o_{i,k+1})$ for $k = 1, \ldots, m-1$, which enforce the fixed sequence of operations within each job $J_i$.
+The node set $V = \{s, t\} \cup \{o_{ik} \mid J_i \in J, k = 1, \ldots, m\}$ contains a dummy source node $s$, a dummy sink node $t$, and nodes representing all operations, where each node $o_{ik}$ has a weight equal to its processing time $p_{ik}$.
+The directed arc set $X$ represents fixed job precedence constraints, connecting $(s, o_{i1})$, $(o_{im}, t)$, and $(o_{ik}, o_{i,k+1})$ for all $J_i \in J$ and $k = 1, \ldots, m-1$.
 The undirected edge set $Y$ represents potential machine conflicts, containing an undirected edge $\{o_{ik}, o_{jh}\}$ for every pair of operations requiring the same machine $M_u$.
 
-A solution sequence $\pi$ specifies a processing order for each machine, which corresponds mathematically to directing every undirected edge $\{o_{ik}, o_{jh}\} \in Y$ as $(o_{ik} \to o_{jh})$ if $o_{ik}$ precedes $o_{jh}$ on machine $M_u$.
+A solution sequence $\pi$ specifies a processing order on each machine by directing every undirected edge $\{o_{ik}, o_{jh}\} \in Y$ as $(o_{ik} \to o_{jh})$ if $o_{ik}$ precedes $o_{jh}$ on machine $M_u$.
 This complete selection yields a fully directed graph $G(\pi) = (V, X \cup Y(\pi))$, where any directed path between two operations indicates an enforced temporal precedence constraint.
-A sequence $\pi$ represents a physically feasible schedule if and only if the directed graph $G(\pi)$ contains no directed cycles, as a cycle would imply a deadlocked precedence loop where an operation must precede itself \citep{pinedo2016}.
+A sequence $\pi$ represents a physically feasible schedule if and only if the directed graph $G(\pi)$ contains no directed cycles \citep{pinedo2016}.
 
-Furthermore, for any operation $u$, we denote by $JP[u]$ and $JS[u]$ its immediate job predecessor and immediate job successor, respectively.
-Similarly, for a given machine sequence $\pi$, $MP[u]$ and $MS[u]$ denote the immediate machine predecessor and immediate machine successor of operation $u$ on its assigned machine $M(u)$.
+For any operation $u$, let $JP[u]$ and $JS[u]$ denote its immediate job predecessor and successor, while $MP[u]$ and $MS[u]$ represent its immediate machine predecessor and successor in sequence $\pi$.
 
-In traditional makespan minimization, setting operation start times as early as possible on a given acyclic graph $G(\pi)$ yields an optimal schedule, which researchers compute efficiently in $O(|V| + |X|)$ time via critical path calculation.
+In traditional makespan minimization, scheduling operations as early as possible on a given acyclic graph $G(\pi)$ yields an optimal schedule computable in linear time via critical path method.
 In contrast, JITJSS penalizes early completions, meaning that scheduling operations as early as possible is generally non-optimal.
 For a fixed feasible operation sequence $\pi$, determining the optimal completion times $C_{ik}$ requires solving a timing sub-problem to balance earliness and tardiness penalties.
-Metaheuristic methods for JITJSS typically decompose the solution process into two stages: exploring the space of operation sequences $\pi$ via local search or metaheuristics, and solving the timing sub-problem for each sequence using mathematical programming \citep{dos2010combination, wang2014variable, ahmadian2021meta}.
+Metaheuristic methods for JITJSS typically decompose the solution process into two stages: exploring the sequence space metaheuristics and solving the timing sub-problem for each evaluated sequence using mathematical programming \citep{dos2010combination, wang2014variable, ahmadian2021meta}.

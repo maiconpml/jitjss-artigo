@@ -1,75 +1,55 @@
+To validate \texttt{swap\_crit} objectively, we construct a comprehensive algorithmic design space that integrates our operator with established literature components.
+Rather than constraining the evaluation to a single manually tuned algorithm, we adopt a bottom-up design space representation \citep{de2018automatic}.
+This formulation enables automated algorithm configurators to explore diverse heuristic combinations, testing whether \texttt{swap\_crit} emerges as a preferred operator and drives competitive performance.
 
-To construct effective metaheuristics without constraining the solver to a predefined top-level architecture, we adopt a bottom-up automatic algorithm design (AAD) paradigm.
-Unlike top-down approaches that select among a few rigid, monolithic algorithm templates, the bottom-up approach focuses on designing modular, fine-grained algorithmic components.
-Automated configurators then combine these low-level building blocks to assemble novel and hybrid metaheuristic architectures automatically \citep{de2018automatic}.
-We selected these algorithmic building blocks primarily from the existing JITJSS literature, while also incorporating effective strategies from related scheduling domains.
+Figure~\ref{fig:grammar} formalizes this design space via a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}, where derivations from \texttt{<algorithm>} generate valid metaheuristics. Non-terminals define structural choices, such as initialization (\texttt{<initial\_sol>}), neighborhood selection (\texttt{<neighborhood>}), search strategy (\texttt{<search>}), and scheduling (\texttt{<scheduler>}), whereas terminals specify concrete operators and numeric parameters.
 
-To specify valid combinations of algorithmic components systematically, we formalize the design space using a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}.
-In our BNF grammar, shown in Figure~\ref{fig:grammar}, every derivation from the start symbol \texttt{<algorithm>} produces a syntactically valid algorithm.
-Non-terminal symbols represent design decisions, such as initial solution generation (\texttt{<initial\_sol>}), neighborhood selection (\texttt{<neighborhood>}), search procedures (\texttt{<search>}), and sequence schedulers (\texttt{<scheduler>}), while terminal symbols represent specific algorithmic operators or numerical parameters.
+Following the methodology of \citet{mascia2013grammars} and \citet{mascia2014grammar}, we map non-terminal symbols directly to categorical, ordinal, or numerical parameters within an automated configuration framework.
+Derivations generate conditional parameter hierarchies, ensuring that the configurator evaluates parameters only when the corresponding algorithmic component is active.
+To accommodate recursive structures, such as nested search procedures, within a finite parameter space, we instantiate distinct parameter blocks up to maximum depth $K$, where decisions at level $i+1$ activate only when the recursive call is instantiated, making level $i+1$ choices conditional on the recursive decision at level $i$.
 
-Following the methodology proposed by \citet{mascia2013grammars} and \citet{mascia2014grammar}, we map non-terminal symbols directly to categorical, ordinal, or numerical parameters within an Automatic Algorithm Configuration (AAC) framework.
-Deriving a non-terminal symbol from another non-terminal symbol creates conditional parameter relationships within the configurator, ensuring that the tool evaluates parameters only when the corresponding algorithmic component is active.
-To accommodate recursive search structures, such as nested local searches or iterated metaheuristics, within a finite parameter space, we follow \citeauthor{mascia2013grammars} by duplicating parameter blocks for each allowed recursion level $i$, making level $i+1$ parameters conditional on the recursive choice at level $i$.
-
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=1\linewidth]{img/grammar.png}
-\caption{Context-free grammar in Backus-Naur Form (BNF) defining the JITJSS algorithmic design space.}
+% \caption{Context-free grammar in Backus-Naur Form (BNF) defining the algorithmic design space for automated validation.}
+\caption{\textbf{Context-Free Grammar in Backus--Naur Form (BNF) defining the JITJSS algorithm design space.} 
+    Production rules specify the modular architectural components of the configured solvers: initial solution heuristics ($\langle\texttt{initial\_sol}\rangle$), schedule decoders ($\langle\texttt{scheduler}\rangle$), iterative metaheuristic structures ($\langle\texttt{search}\rangle$), and local search neighborhoods ($\langle\texttt{neighborhood\_type}\rangle$).}
 \label{fig:grammar}
 \end{figure}
 
 \subsection{Initialization Rules}
 \label{subsec:initialization_rules}
 
-Initial solution sequences are generated via the non-terminal symbol \texttt{<initial\_sol>}, which selects one of two constructive procedures combined with one priority dispatching rule (\texttt{<dispatch\_rule>}) among Earliest Due Date (\texttt{edd}), random selection (\texttt{random}), and the ALL+CR+SPT (\texttt{all\-\_cr\-\_spt}) rule proposed by \citet{wang2014variable}.
-The first constructive option is a standard dispatching procedure (\texttt{priority}) that iteratively selects the next operation to schedule directly from a candidate list by evaluating the chosen priority rule.
+The non-terminal \texttt{<initial\_sol>} derives an initial sequence by pairing a constructive heuristic with a dispatching rule (\texttt{<dispatch\_rule>}). Available rules include Earliest Due Date (\texttt{edd}), uniform random selection (\texttt{random}), and the composite ALL+CR+SPT rule (\texttt{all\_cr\_spt}) from \citet{wang2014variable}.
+The first constructive option, \texttt{priority}, schedules operations sequentially from the schedulable set according to the selected dispatching rule.
 
-The second option is the Giffler--Thompson (GT) method \citep{giffler1960algorithms}, which also employs a chosen dispatching rule, but performs internal filtering operations on the candidate list prior to rule evaluation to guarantee the generation of active schedules without unnecessary machine idle time.
-The GT algorithm is included as it serves as the standard constructive procedure across leading JITJSS studies \citep{ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement}.
+The second option, the Giffler--Thompson (\texttt{gt}) algorithm \citep{giffler1960algorithms}, restricts candidate selections to guarantee active schedules before breaking ties via the dispatching rule.
+We incorporate GT because it represents the standard constructive baseline across prominent JITJSS works \citep{ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement}
 
 \subsection{Neighborhood Operators} 
 \label{subsec:neighborhood_operators}
 
-The non-terminal symbol \texttt{<neighborhood>} specifies the neighborhood structures available in the design space, while \texttt{<improvement>} determines the exploration mode (First Improvement \texttt{fi} or Best Improvement \texttt{bi}).
-To explore candidate operation sequences efficiently, our design space incorporates seven distinct neighborhood structures, categorized into four groups based on their search mechanics and domain specificity.
+The non-terminal \texttt{<neighborhood>} defines seven neighborhood structures partitioned into four groups by their underlying search logic. Each heuristic neighborhood couples with an exploration strategy (\texttt{<improvement>}): First Improvement (\texttt{fi}) or Best Improvement (\texttt{bi}).
 
-The first group comprises classical, unfiltered neighborhood operators.
-The \texttt{swap\_adj} operator swaps two adjacent operations assigned to the same machine without applying filtering rules \citep{dos2010combination}.
-The \texttt{swap\_rand} operator randomly selects two operations assigned to the same machine and swaps their processing order \citep{ahmadian2021meta}.
-The \texttt{insert\_rand} operator randomly selects an operation and relocates it to another position on the same machine \citep{ahmadian2021meta}.
+The first group comprises classical, unfiltered moves operating on a single machine: \texttt{swap\_adj} swaps adjacent operations \citep{dos2010combination}, while \texttt{swap\_rand} and \texttt{insert\_rand} randomly swap or relocate arbitrary operation pairs \citep{ahmadian2021meta}.
 
-The second group includes penalty-driven heuristic operators based on the structural properties established by \citet{wang2014variable}.
-These operators leverage two key properties: (i) if an early operation lacks an adjacent machine successor ($MS[u]$), its immediate job successor ($JS[u]$) is guaranteed to be early; and (ii) if a tardy operation lacks an adjacent machine predecessor ($MP[u]$), its immediate job predecessor ($JP[u]$) is guaranteed to be tardy.
-Exploiting these properties, the \texttt{swap\_penal} operator targets a penalized operation $u$; if $u$ lacks adjacent machine neighbors ($MP[u]$ or $MS[u]$), the operator traces its job successors $JS[u]$ (for early operations) or job predecessors $JP[u]$ (for tardy operations) until locating a job relative with an adjacent machine neighbor, swapping them to eliminate penalty accumulation.
+The second group incorporates the penalty-driven heuristics of \citet{wang2014variable}. These operators identify an early (or tardy) operation $u$ and exploit machine idle time by tracking precedence properties. The \texttt{swap\_penal} operator searches upstream or downstream within the same job until finding an operation with an adjacent machine neighbor to swap. Meanwhile, \texttt{insert\_penal} relocates $u$ to the boundary of its contiguous machine block whenever precedence feasibility allows, directly reducing idle gaps without introducing secondary delays.
 
-The \texttt{insert\_penal} operator shifts penalized operations relative to their machine blocks (maximal sequences of adjacent operations without idle time).
-For an early operation $u$, \texttt{insert\_penal} attempts to relocate $u$ to the end of its machine block $B$, provided that the start time of the block's final operation does not exceed the start time of $u$'s job successor, $S_{JS[u]}$.
-For a tardy operation $u$, \texttt{insert\_penal} attempts to relocate $u$ to the beginning of its machine block $B$, provided that the completion time of the block's first operation is at least the completion time of $u$'s job predecessor, $C_{JP[u]}$, thereby exploiting idle times between blocks while controlling move locality.
+The third group consists of our proposed \texttt{swap\_crit} operator (Section~\ref{sec:swap_crit}). Unlike localized or intra-job adjustments, \texttt{swap\_crit} traces the disjunctive critical path across multiple jobs and machines, swapping boundary operations of critical blocks to target the structural sources of tardiness directly.
 
-The third group introduces our novel problem-specific operator, named \texttt{swap\_crit} (critical swap).
-In preliminary experiments, we observed that tardiness penalties dominate total schedule costs in JITJSS.
-Driven by this empirical finding, we designed \texttt{swap\_crit} to focus exclusively on tardy operations.
-In classical job shop scheduling, reducing the completion time of a target operation requires modifying its underlying critical path; the classic N5 neighborhood of \citet{nowicki1996fast} achieves this by swapping operations at the boundaries of critical blocks for makespan minimization.
-We adapt the N5 critical block structure to JITJSS by applying the critical path concept individually to each tardy operation.
-For a given tardy operation $u$, \texttt{swap\_crit} constructs a backward critical path by recursively tracing the predecessor operation, either job predecessor $JP[u]$ or machine predecessor $MP[u]$, that exhibits the maximum completion time and directly delays $u$.
-Once the algorithm builds this individual critical path, it generates neighbor solutions by swapping the first two and last two operations of each critical block along the path, directly targeting the bottleneck operations that cause tardiness.
-
-The fourth group consists of a hybrid exact relaxation operator, named \texttt{relax} \citep{ahmadian2021meta}.
-During local search, the \texttt{relax} operator relaxes the processing sequence of a sub-sequence of operations while holding the remainder of the schedule fixed, invoking the CPLEX solver with a 1-second time limit to re-optimize their ordering for direct objective improvement.
-Because the CPLEX solver directly optimizes the sub-problem internally and returns a single optimal permutation, the \texttt{relax} operator bypasses standard neighborhood exploration modes (\texttt{<improvement>}), rendering First Improvement (\texttt{fi}) and Best Improvement (\texttt{bi}) choices inapplicable to this operator.
+The fourth group contains \texttt{relax}, an exact hybrid operator that re-optimizes a selected sub-sequence of operations via CPLEX within a 1-second limit \citep{ahmadian2021meta}. Because CPLEX solves the sub-problem directly, \texttt{relax} produces a single deterministic move, bypassing the \texttt{<improvement>} parameter.
 
 \subsection{Search procedures}
 \label{subsec:search_procedures}
 
 The non-terminal symbol \texttt{<search>} selects the high-level metaheuristic search framework: Local Search (\texttt{ls}), Tabu Search (\texttt{tabu}), or Iterated Local Search (\texttt{ils}).
 Local Search represents a fundamental single-solution search procedure that iteratively explores the solution space using a selected neighborhood structure.
-Starting from an initial sequence, the LS procedure evaluates neighbor solutions according to the configured exploration mode and transitions to improving solutions until reaching a local optimum, terminating when no strictly better neighbor exists in the neighborhood.
+Starting from an initial sequence, the LS procedure evaluates neighbor solutions according to the configured exploration mode and transitions to improving solutions until reaching a local optimum.
 
-While standard local search terminates upon encountering its first local optimum, tabu search extends this local exploration to escape local optima by incorporating flexible memory structures and dedicated mechanisms to prevent cyclic behavior \citep{zubaran2016tabu}.
+Tabu Search (TS) escapes local optima using recency-based memory to prevent cyclic trajectories \citet{talbi}.
 The tabu memory records the disjunctive graph arcs broken by recent moves, prohibiting their reversal during a configurable \emph{tabu tenure} (\texttt{tenure}).
 For operation swap moves, the algorithm marks the incoming arcs of the swapped operations as tabu, whereas for insert moves, it marks the incoming arc of the relocated operation.
-During neighborhood exploration, TS selects candidate moves according to a strict priority hierarchy: (i) the best move that satisfies the aspiration criterion by improving upon the global best solution found so far; (ii) the best non-tabu move; or (iii) the oldest tabu move if all candidate moves are tabu.
+During neighborhood exploration, TS selects candidate moves by priority: (i) the best move satisfying the aspiration criterion (improving the global best); (ii) the best non-tabu move; or (iii) the oldest tabu move when all candidate moves are tabu.
 When selecting an expired tabu move, the algorithm advances its internal clock to purge all older entries automatically.
 
 To maintain search diversification and recover from stagnation, TS incorporates an elite solution list $E$ of size $L$ (\texttt{elite\_list\_size}) alongside a non-improvement iteration counter \citep{zubaran2016tabu}.
@@ -77,34 +57,31 @@ The elite list $E$ stores solutions that achieve a global objective improvement,
 If the search executes a maximum allowed number of consecutive non-improving iterations (\texttt{limit\_iters}), TS initiates a backjump operation to resume exploration from the elite list.
 
 In addition to monitoring non-improving iterations, TS employs a dedicated cycle detector to prevent search trajectory cycling \citep{zubaran2016tabu}.
-The cycle detector monitors the sequence of objective values across the last $d$ (\texttt{max\_d}) visited solutions.
-If this exact sequence of $d$ objective values repeats in the same order $c$ (\texttt{max\_c}) consecutive times, the detector identifies trajectory cycling and forces an immediate backjump operation.
+The cycle detector tracks the objective values across the last $d$ (\texttt{max\_d}) visited solutions.
+If this exact sequence repeats $c$ (\texttt{max\_c}) consecutive times, the algorithm triggers an immediate backjump operation.
 
 Upon executing a backjump, the algorithm restores the search state of the most recent elite solution in $E$, reloading its tabu memory state while excluding previously explored neighbor moves from that solution.
-Furthermore, each time a backjump occurs, the algorithm dynamically reduces the current non-improvement iteration limit by $\frac{100}{x}\%$, where $x$ represents the non-terminal symbol \texttt{<decrease\_divisor>}.
+Furthermore, each time a backjump occurs, the algorithm dynamically scales the non-improvement iteration limit by a factor of $(1 - 1/x)$, where $x$ corresponds to \texttt{<decrease\_divisor>}.
 When all neighborhood branches of the current elite solution are exhausted, TS purges it from $E$ and cascades the backjump to the penultimate elite solution.
 Finally, if a backjump is triggered while the elite list $E$ is empty, the Tabu Search procedure terminates.
 
 Iterated Local Search acts as a high-level algorithmic container that repeatedly perturbs the incumbent solution, applies an inner search procedure (LS or TS) to reach a new local optimum, and evaluates the candidate solution using an acceptance criterion \citep{talbi}.
 To escape attraction basins during search stagnation, ILS incorporates a dedicated perturbation mechanism based on the state-of-the-art strategy of \citet{ahmadian2021meta}.
-This perturbation selects two machines randomly, relaxes the disjunctive precedence constraints across all operations assigned to those two machines, and calls the CPLEX solver with a 1-second time limit to re-sequence them, disrupting the current schedule structure to produce a fresh starting point for the subsequent inner search loop.
-Specifically, our acceptance criterion adopts a strictly improving rule, accepting a candidate solution if and only if it improves upon the all-time global best solution found so far.
+This perturbation randomly selects two machines, relaxes the disjunctive precedence constraints across all operations assigned to those two machines, and calls the CPLEX solver with a 1-second time limit to re-optimize their ordering before resuming the inner search.
+The outer acceptance criterion is strictly elitist, accepting a candidate solution only if it improves the incumbent global best.
 
 Furthermore, when configured with an ordered sequence of distinct neighborhood structures ($N_1, N_2, \ldots, N_k$), the algorithm advances to the next neighborhood structure whenever an iteration fails to yield a global improvement.
 Upon reaching the end of the neighborhood list ($N_k$), ILS loops cyclically back to the first neighborhood ($N_1$) to resume exploration.
-Through this multi-neighborhood cyclic progression, the ILS framework functionally encapsulates Variable Neighborhood Search (VNS) dynamics \citep{talbi}, allowing our design space to synthesize pure ILS or VNS metaheuristics dynamically within a unified grammar structure.
+This cyclic progression emulates the neighborhood-change step of Variable Neighborhood Search (VNS) \citep{talbi}, allowing the grammar to synthesize both ILS and VNS configurations within a unified grammar structure.
 
 \subsection{Schedulers}
 \label{subsec:exact_subsolvers}
 
-To evaluate candidate operation sequences $\pi$, our design space incorporates two distinct sequence timing sub-solvers under the non-terminal symbol \texttt{<scheduler>}.
-Given a fixed directed acyclic graph $G(\pi)$, these schedulers compute operation completion times $C_{ik}$ and determine total weighted earliness and tardiness penalties $z$.
+Under the non-terminal \texttt{<scheduler>}, the design space provides two timing sub-solvers that determine operation completion times $C_{ik}$ and evaluate objective penalty $z$ on the fixed acyclic graph $G(\pi)$.
 
-The first option, \texttt{cplex}, formulates the exact timing sub-problem for sequence $\pi$ as a Linear Program (LP) and solves it using the CPLEX solver.
-By optimizing completion times $C_{ik}^*$ directly against penalty weights $\alpha_{ik}$ and $\beta_{ik}$, \texttt{cplex} computes the minimum achievable cost for the fixed sequence $\pi$.
-To mitigate the high computational overhead of invoking an external solver iteratively during search, \texttt{cplex} operates under a strict 1-second time limit per sequence evaluation, returning the best feasible schedule found if the time budget expires.
+The first option, \texttt{cplex}, formulates the exact timing sub-problem for sequence $\pi$ as a Linear Program (LP), invoking CPLEX to find optimal completion times $C_{ik}^*$.
+To mitigate the high computational overhead of invoking an external solver iteratively during search, \texttt{cplex} operates under a strict 1-second time limit per sequence evaluation, returning the best solution available upon timeout.
 
-The second option, \texttt{linear}, is a fast, linear-time heuristic scheduler that combines early scheduling with a deliberate right-shifting mechanism.
+The second option, \texttt{linear}, is a linear-time heuristic scheduler that combines early scheduling with a right-shifting mechanism.
 Initially, \texttt{linear} schedules operations as early as possible along the acyclic graph $G(\pi)$ in linear time with respect to the total number of operations.
-To mitigate unnecessary earliness penalties, the algorithm then performs a backward pass that deliberately delays early operations into available machine idle time slots.
-The algorithm restricts these right-shifting delays exclusively to movements that do not compromise on-time or tardy operations, guaranteeing non-increasing objective values.
+A subsequent backward pass shifts early operations into available idle slots without delaying downstream operations, reducing earliness penalties while preserving feasibility and objective monotonicity.

@@ -8,32 +8,38 @@ Consequently, JIT scheduling requires minimizing both earliness and tardiness pe
 
 The Just-In-Time Job Shop Scheduling (JITJSS) problem \citep{baptiste2008lagrangian} formally models this operational context.
 In JITJSS, each job consists of operations with specific target due dates, and the objective is to determine an optimal machine schedule that minimizes total weighted earliness and tardiness costs.
-
 JITJSS is a strongly NP-hard problem \citep{du1990minimizing}.
 Consequently, extensive research has focused on metaheuristic algorithms, including genetic algorithms \citep{araujo2009genetic, dos2010combination, yang2012improved}, variable neighborhood search \citep{wang2014variable, ahmadian2021meta}, adaptive large neighborhood search \citep{laborie2007self, abderrazzak2022adaptive}, and deep reinforcement learning \citep{sabri2023reinforcement}.
-Among these, the work by \citeauthor{ahmadian2021meta} remains the most comprehensive benchmark because it is the latest study to evaluate all instance scales.
-Although recent studies \citep{abderrazzak2022adaptive, sabri2023reinforcement} report minor improvements on small and medium instances, they omit evaluations on large instances.
-Therefore, the current state of the art represents a synthesis of these contributions, with \citeauthor{ahmadian2021meta} serving as the primary baseline across all problem sizes.
+Across the JITJSS literature, five key studies \citep{dos2010combination, wang2014variable, ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement} hold the best-known solution value for at least one benchmark instance.
+Among them, \citeauthor{ahmadian2021meta} provides the most comprehensive baseline by evaluating all problem scales, whereas other recent works \citep{abderrazzak2022adaptive, sabri2023reinforcement} focused on small and medium instances.
+Evaluating algorithmic performance across the benchmark set therefore requires comparing solutions against the composite best results established across these five studies.
 
-Traditionally, designing metaheuristics relies on manual trial-and-error \citep{birattari2009tuning}, where designers choose, combine, and tune components such as search neighborhoods and perturbation rules.
-This manual process is time-consuming, heavily dependent on human intuition, difficult to replicate, and inherently restricts the search to a small fraction of the potential algorithmic space \citep{stutzle2018automated}.
+In JITJSS, empirical evidence reveals that tardiness penalties dominate total schedule costs.
+However, existing neighborhood operators in the literature do not focus on this critical aspect.
+Most published methods rely either on random, unfiltered operation moves \citep{dos2010combination, ahmadian2021meta}, or on local search operators adapted from makespan minimization ignoring operation due dates.
+Consequently, standard operators lack mechanisms to identify and resolve the specific operation sequences that delay tardy jobs.
+To address this gap, this paper introduces a novel neighborhood operator, named \texttt{swap\_crit}, specifically designed to mitigate tardiness penalties.
+The \texttt{swap\_crit} operator traces the backward critical path of each individual tardy operation, identifies the exact sequence of bottleneck operations causing deadline violations, and generates candidate moves by swapping boundary operations of critical blocks along that path.
 
-To address these limitations, Automatic Algorithm Design (AAD) formulates algorithm creation as an optimization problem itself \citep{stutzle2018automated}.
-By using automated configuration tools such as \texttt{irace} \citep{lopez2016irace}, AAD systematically combines algorithmic building blocks to synthesize high-performing solvers.
-This approach has successfully generated state-of-the-art algorithms for several hard combinatorial optimization problems, including Boolean Satisfiability (SAT) \citep{khudabukhsh2016satenstein}, Unconstrained Binary Quadratic Programming (UBQP) \citep{de2018automatic}, Permutation Flow Shop Scheduling (PFSP) \citep{marmion2013automatic, pagnozzi2019automatic, brum2018automatic}, Hybrid Flow Shop (HFS) \citep{alfaro2020automatic}, and Non-Permutation Flow Shop Scheduling (NPFSP) \citep{brum2022automatic}.
-
-Despite its demonstrated success in related scheduling problems, researchers have not yet applied AAD to JITJSS.
-This paper addresses this research gap by investigating whether automated algorithm design can synthesize metaheuristics for JITJSS that match or outperform current state-of-the-art methods.
+A key methodological challenge in metaheuristic research is evaluating the true merit of a newly proposed operator without designer bias.
+Traditionally, researchers embed a new operator into a fixed metaheuristic framework and tune its parameters manually \citep{birattari2009tuning}.
+This manual approach risks overfitting the operator to a specific algorithmic architecture and fails to demonstrate whether the operator would remain effective in alternative configurations \citep{stutzle2018automated}.
+To ensure an unbiased and rigorous validation, we employ Automatic Algorithm Design (AAD) via \texttt{irace} \citep{lopez2016irace} as an experimental testing tool.
+We formalize a broad algorithmic design space using a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}.
+This design space couples our proposed \texttt{swap\_crit} operator with alternative literature neighborhoods (classical swaps, penalty heuristics, and exact mathematical relaxations), diverse initialization procedures, multiple search frameworks (Local Search, Tabu Search, and Iterated Local Search), and sequence schedulers.
+By allowing the automated configurator to select components freely, we directly test whether \texttt{swap\_crit} is selected over competing literature operators and whether it contributes decisively to achieving state-of-the-art performance.
 
 The main contributions of this paper are fourfold:
 \begin{enumerate}[(i)]
-    \item We formalize an algorithmic design space for JITJSS using a context-free grammar that integrates diverse search strategies, neighborhood operators, and exact mathematical solvers.
-    \item We introduce a novel domain-specific neighborhood operator, named \texttt{swap\_crit}, tailored specifically to the structural characteristics of JITJSS.
-    \item We employ \texttt{irace} to explore the proposed design space, automatically generating an Iterated Tabu Search (ITS) algorithm.
-    \item We evaluate the automatically designed algorithm on 72 standard benchmark instances \citep{baptiste2008lagrangian}. The generated algorithm matched or improved upon current state-of-the-art results in 72.2\% of the instances, requiring an average execution time of only 21.1 seconds.
+    \item We propose \texttt{swap\_crit}, a novel neighborhood operator for JITJSS that traces individual backward critical paths to resolve bottleneck operations causing tardiness penalties.
+    \item We formulate a metaheuristic search that integrates \texttt{swap\_crit} within a multi-neighborhood Iterated Tabu Search (ITS) architecture.
+    \item We establish an AAD validation framework parameterized via a context-free BNF grammar to evaluate the proposed operator objectively within diverse algorithm components.
+    \item We conduct extensive computational experiments on 72 standard benchmark instances \citep{baptiste2008lagrangian}, showing that \texttt{irace} selects \texttt{swap\_crit} in 80\% of elite configurations, and the resulting algorithm matches or improves upon literature results in 72.2\% of the instances.
 \end{enumerate}
 
-The remainder of this paper is organized as follows: Section~\ref{subsec:prob} describes the JITJSS problem formulation while Section~\ref{subsec:litrev} reviews the literature on JITJSS.
-Section~\ref{sec:design_space} presents the algorithm design space along with the proposed \texttt{swap\_crit} operator.
-Section~\ref{sec:config_process} details the experimental design and training methodology.
-Section~\ref{sec:results} discusses the computational results, and Section~\ref{sec:conclu} concludes the paper with directions for future work.
+The remainder of this paper is organized as follows:
+Section~\ref{sec:swap_crit} introduces the proposed \texttt{swap\_crit} neighborhood operator.
+Section~\ref{sec:design_space} defines the algorithmic design space and its context-free grammar.
+Section~\ref{sec:config_process} describes the automated algorithm configuration protocol.
+Section~\ref{sec:results} presents computational experiments and comparative analyses against literature baselines.
+Section~\ref{sec:conclu} concludes the paper with final remarks.

@@ -1,37 +1,38 @@
 \begin{table}[ht]
 \centering
-\caption{Computational results of configuration C1 for instances with 20 jobs.}
-\label{tab:results_20}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{lcccccccc}
 \hline
-\textbf{Instance}                & \textbf{Cplex}           & \textbf{[1]}          & \textbf{[2]}            & \textbf{[3]}        & \textbf{$B$} & \textbf{$M$}   \\
+
+\textbf{Instance}                & \textbf{Cplex}           & \textbf{D}          & \textbf{W}            & \textbf{A}        & \textbf{$B$} & \textbf{$M$}  \\
 \hline
-loose-equal-1-20x2  & 2565.51 & \textbf{2548.95} & 2551.22 & \textbf{2548.95}                   & \textbf{2548.95}     & 2549.19               \\
-loose-equal-2-20x2  & 3105.34 & \textbf{3069.13} & 3070.16 & \textbf{3069.13} & \textbf{3069.13}     & \textbf{3069.13}               \\
-loose-equal-1-20x5  & 8271.34 & 7545.44 & 7758.02 & 7524.13                   & \textbf{7487.77}     & 7666.29              \\
-loose-equal-2-20x5  & 7793.45 & 7252.81 & 7302.01 & 7059.38                   & \textbf{7022.53}     & 7128.87               \\
-loose-equal-1-20x10 & 5597.4  & 5260.48 & 5476.47 & 4651.31                   & \textbf{4592.02}     & 4687.60               \\
-loose-equal-2-20x10 & 1862.41 & 1987.65 & 1718.08 & \textbf{1597.89}          & 1608.61              & 1701.42                        \\
-loose-tard-1-20x2   & 1265.36 & 1206.97 & 1205.59 & 1206.4                     & \textbf{1203.88}     & 1206.97               \\
-loose-tard-2-20x2   & 772.89  & \textbf{769.35}  & 790.12 & \textbf{769.35}   & 771.06               & 776.01                          \\
-loose-tard-1-20x5   & 3548.14 & 2938.24 & 3517.2  & \textbf{2931.11}          & 2936.63              & 3068.78                         \\
-loose-tard-2-20x5   & 4048.77 & 3722.61 & 3684.67 & 3627.51                   & \textbf{3617.49}     & 3646.58               \\
-loose-tard-1-20x10  & 6494.34 & 5093.89 & 5478.21 & 4817.32                   & \textbf{4789.13}     & 5114.72               \\
-loose-tard-2-20x10  & 1545.95 & 1570.64 & 1599.55 & \textbf{1401.28}          & 1516.95              & 1531.54                         \\
-tight-equal-1-20x2  & 1940.06 & 1937.49 & 1939.11 & 1936.45                   & \textbf{1933.72}     & \textbf{1933.72}               \\
-tight-equal-2-20x2  & 961.44  & \textbf{941.69}  & 959.65  & 943.7            & 944.93               & 948.01                          \\
-tight-equal-1-20x5  & 3013.79 & 2866.94 & 2935.95 & 2865.95                   & \textbf{2821.02}     & \textbf{2865.45}               \\
-tight-equal-2-20x5  & 7233.35 & 6741.16 & 6964.91 & 6613.62                   & \textbf{6581.72}     & 6626.55               \\
-tight-equal-1-20x10 & 11561.7 & 10607.2 & 11073.1 & \textbf{10378.8}          & 10534.50             & 10831.90                          \\
-tight-equal-2-20x10 & 8501.42 & 7310.32 & 7317.74 & \textbf{6839.3}           & 6892.16              & 7047.16                          \\
-tight-tard-1-20x2   & 1675.37 & \textbf{1671.87} & 1682.94 & 1674.6           & \textbf{1671.87}     & 1672.03               \\
-tight-tard-2-20x2   & 1489.65 & \textbf{1448.66} & 1459.57 & 1451.61          & \textbf{1448.66}     & \textbf{1448.66}               \\
-tight-tard-1-20x5   & 3821.29 & 3672.18 & 3669.09 & 3620.61                   & \textbf{3598.12}     & \textbf{3618.13}               \\
-tight-tard-2-20x5   & 1881.02 & 1858.19 & 1976.11 & \textbf{1792.78}          & 1802.78              & 1808.36                         \\
-tight-tard-1-20x10  & 4984.31 & 4853.81 & 5536.64 & 4445.59                   & \textbf{4406.01}     & \textbf{4434.02}               \\
-tight-tard-2-20x10  & 4057.01 & 3358.61 & 3245.9  & \textbf{3085.54}          & 3207.33              & 3242.14                         \\
+loose-equal-1-20x2 & 2565.51 & 2548.95 & 2551.22 & 2548.95 & \textbf{2547.92} & \textbf{2548.95} \\
+loose-equal-2-20x2 & 3105.34 & \textbf{3069.13} & 3070.16 & \textbf{3069.13} & \textbf{3069.13} & \textbf{3069.13} \\
+loose-equal-1-20x5 & 8271.34 & 7545.44 & 7758.02 & 7524.13 & \textbf{7487.77} & 7649.11 \\
+loose-equal-2-20x5 & 7793.45 & 7252.81 & 7302.01 & 7059.38 & \textbf{7008.65} & 7086.24 \\
+loose-equal-1-20x10 & 5597.4 & 5260.48 & 5476.47 & 4651.31 & \textbf{4507.31} & 4665.08 \\
+loose-equal-2-20x10 & 1862.41 & 1987.65 & 1718.08 & \textbf{1597.89} & 1608.14 & 1659.73 \\
+loose-tard-1-20x2 & 1265.36 & 1206.97 & 1205.59 & 1206.4 & \textbf{1203.88} & \textbf{1204.43} \\
+loose-tard-2-20x2 & 772.89 & \textbf{769.35} & 790.12 & \textbf{769.35} & 771.06 & 782.39 \\
+loose-tard-1-20x5 & 3548.14 & 2938.24 & 3517.2 & 2931.11 & \textbf{2874.65} & 2937.00 \\
+loose-tard-2-20x5 & 4048.77 & 3722.61 & 3684.67 & 3627.51 & \textbf{3615.47} & 3643.19 \\
+loose-tard-1-20x10 & 6494.34 & 5093.89 & 5478.21 & 4817.32 & \textbf{4775.01} & 5094.21 \\
+loose-tard-2-20x10 & 1545.95 & 1570.64 & 1599.55 & \textbf{1401.28} & 1502.23 & 1530.81 \\
+tight-equal-1-20x2 & 1940.06 & 1937.49 & 1939.11 & 1936.45 & \textbf{1933.72} & \textbf{1933.72} \\
+tight-equal-2-20x2 & 961.44 & \textbf{941.69} & 959.65 & 943.7 & 948.01 & 948.01 \\
+tight-equal-1-20x5 & 3013.79 & 2866.94 & 2935.95 & 2865.95 & \textbf{2821.00} & 2868.29 \\
+tight-equal-2-20x5 & 7233.35 & 6741.16 & 6964.91 & 6613.62 & \textbf{6581.72} & 6617.41 \\
+tight-equal-1-20x10 & 11561.7 & 10607.2 & 11073.1 & \textbf{10378.8} & 10534.50 & 10813.10 \\
+tight-equal-2-20x10 & 8501.42 & 7310.32 & 7317.74 & \textbf{6839.3} & 6876.49 & 6955.14 \\
+tight-tard-1-20x2 & 1675.37 & \textbf{1671.87} & 1682.94 & 1674.6 & \textbf{1671.87} & \textbf{1671.87} \\
+tight-tard-2-20x2 & 1489.65 & \textbf{1448.66} & 1459.57 & 1451.61 & \textbf{1448.66} & \textbf{1448.66} \\
+tight-tard-1-20x5 & 3821.29 & 3672.18 & 3669.09 & 3620.61 & \textbf{3598.12} & \textbf{3618.13} \\
+tight-tard-2-20x5 & 1881.02 & 1858.19 & 1976.11 & 1792.78 & \textbf{1784.19} & 1808.36 \\
+tight-tard-1-20x10 & 4984.31 & 4853.81 & 5536.64 & 4445.59 & \textbf{4309.35} & \textbf{4434.02} \\
+tight-tard-2-20x10 & 4057.01 & 3358.61 & 3245.9 & \textbf{3085.54} & 3196.75 & 3239.89 \\
 \hline
 \end{tabular}
 }
+\caption{Computational results of configuration C1 for instances with 20 jobs.Literature sources: D (\citet{dos2010combination}), W (\citet{wang2014variable}), Cplex and A (\citet{ahmadian2021meta}).}
+\label{tab:results_20}
 \end{table}
