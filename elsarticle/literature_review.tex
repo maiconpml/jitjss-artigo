@@ -1,18 +1,20 @@
 \citet{baptiste2008lagrangian} introduced the JITJSS problem and established the standard 72 benchmark test instances.
 Since then, researchers have developed various exact, heuristic, and hybrid approaches.
-Initial exact and hybrid approaches combined Lagrangian relaxations, Branch-and-Bound, and local search \citep{baptiste2008lagrangian, monette2009just}, as well as self-adapting Large Neighborhood Search \citep{laborie2007self}.
+Initial exact and hybrid approaches combined Lagrangian relaxation, branch-and-bound, and local search \citep{baptiste2008lagrangian, monette2009just}, as well as self-adapting Large Neighborhood Search \citep{laborie2007self}.
 
 Evolutionary algorithms introduced effective sequence-level search strategies for JITJSS.
-\citet{araujo2009genetic} and \citet{dos2010combination} proposed Genetic Algorithms, with \citeauthor{dos2010combination} introducing a two-stage decomposition that pairs metaheuristic sequence search with Linear Programming to determine optimal operation start times.
+\citet{araujo2009genetic} and \citet{dos2010combination} proposed genetic algorithms, with \citet{dos2010combination} introducing a two-stage decomposition that pairs metaheuristic sequence search with Linear Programming to determine optimal operation start times.
 \citet{yang2012improved} further expanded evolutionary methods by introducing a three-stage chromosome decoding strategy.
 
 Trajectory methods, particularly Variable Neighborhood Search (VNS), established strong baselines by embedding exact sub-solvers into local search.
-\citet{wang2014variable} combined VNS with linear programming schedule generation, while \citet{ahmadian2021meta} extended VNS by embedding integer programming directly within disjunctive 2-machine local search operators, establishing the primary benchmark baseline across all 72 instances.
+\citet{wang2014variable} combined VNS with linear programming schedule generation, while \citet{ahmadian2021meta} extended VNS by embedding integer programming directly within disjunctive two-machine local search operators, establishing the primary benchmark baseline across all 72 instances.
 
 More recently, adaptive and learning-based techniques have been proposed.
 \citet{abderrazzak2022adaptive} introduced an Adaptive Large Neighborhood Search (ALNS) driven by destroy-and-reconstruct operators, while \citet{sabri2023reinforcement} proposed a Deep Reinforcement Learning framework for rapid schedule synthesis.
 
-\citet{wang2014variable} introduced effective penalty-guided neighborhoods within VNS, successfully addressing local trade-offs between earliness and tardiness within contiguous machine sequences. While these operators optimize local alignments effectively, they operate independently of the multi-machine disjunctive critical paths that propagate delays across jobs. Our proposed \texttt{swap\_crit} operator acts complementarily at this structural level, tracing individual backward critical paths to target the broader predecessor chains that produce deadline violations.
+\citet{wang2014variable} introduced effective penalty-guided neighborhoods within VNS, successfully addressing local trade-offs between earliness and tardiness within contiguous machine sequences.
+While these operators optimize local alignments effectively, they operate independently of the multi-machine disjunctive critical paths that propagate delays across jobs.
+Our proposed \texttt{swap\_crit} operator acts in a complementary manner at this structural level, tracing individual backward critical paths to target the broader predecessor chains that produce deadline violations.
 
 % Overall, five key studies in the literature hold the best-known solution value for at least one benchmark instance: \citet{dos2010combination}, \citet{wang2014variable}, \citet{ahmadian2021meta}, \citet{abderrazzak2022adaptive}, and \citet{sabri2023reinforcement}.
 % The composite literature benchmark for JITJSS is therefore defined by combining the lowest solution values achieved across these five works.

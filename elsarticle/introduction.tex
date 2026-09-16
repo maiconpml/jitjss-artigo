@@ -11,12 +11,12 @@ In JITJSS, each job consists of operations with specific target due dates, and t
 JITJSS is a strongly NP-hard problem \citep{du1990minimizing}.
 Consequently, extensive research has focused on metaheuristic algorithms, including genetic algorithms \citep{araujo2009genetic, dos2010combination, yang2012improved}, variable neighborhood search \citep{wang2014variable, ahmadian2021meta}, adaptive large neighborhood search \citep{laborie2007self, abderrazzak2022adaptive}, and deep reinforcement learning \citep{sabri2023reinforcement}.
 Across the JITJSS literature, five key studies \citep{dos2010combination, wang2014variable, ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement} hold the best-known solution value for at least one benchmark instance.
-Among them, \citeauthor{ahmadian2021meta} provides the most comprehensive baseline by evaluating all problem scales, whereas other recent works \citep{abderrazzak2022adaptive, sabri2023reinforcement} focused on small and medium instances.
+Among them, \citet{ahmadian2021meta} provide the most comprehensive baseline by evaluating all problem scales, whereas other recent works \citep{abderrazzak2022adaptive, sabri2023reinforcement} focus on small and medium instances.
 Evaluating algorithmic performance across the benchmark set therefore requires comparing solutions against the composite best results established across these five studies.
 
 In JITJSS, empirical evidence reveals that tardiness penalties dominate total schedule costs.
 However, existing neighborhood operators in the literature do not focus on this critical aspect.
-Most published methods rely either on random, unfiltered operation moves \citep{dos2010combination, ahmadian2021meta}, or on local search operators adapted from makespan minimization ignoring operation due dates.
+Most published methods rely either on random, unfiltered operation moves \citep{dos2010combination, ahmadian2021meta} or on local search operators adapted from makespan minimization that ignore operation due dates.
 Consequently, standard operators lack mechanisms to identify and resolve the specific operation sequences that delay tardy jobs.
 To address this gap, this paper introduces a novel neighborhood operator, named \texttt{swap\_crit}, specifically designed to mitigate tardiness penalties.
 The \texttt{swap\_crit} operator traces the backward critical path of each individual tardy operation, identifies the exact sequence of bottleneck operations causing deadline violations, and generates candidate moves by swapping boundary operations of critical blocks along that path.
@@ -33,11 +33,12 @@ The main contributions of this paper are fourfold:
 \begin{enumerate}[(i)]
     \item We propose \texttt{swap\_crit}, a novel neighborhood operator for JITJSS that traces individual backward critical paths to resolve bottleneck operations causing tardiness penalties.
     \item We formulate a metaheuristic search that integrates \texttt{swap\_crit} within a multi-neighborhood Iterated Tabu Search (ITS) architecture.
-    \item We establish an AAD validation framework parameterized via a context-free BNF grammar to evaluate the proposed operator objectively within diverse algorithm components.
-    \item We conduct extensive computational experiments on 72 standard benchmark instances \citep{baptiste2008lagrangian}, showing that \texttt{irace} selects \texttt{swap\_crit} in 80\% of elite configurations, and the resulting algorithm matches or improves upon literature results in 72.2\% of the instances.
+    \item We establish an AAD validation framework parameterized via a context-free BNF grammar to evaluate the proposed operator objectively among diverse algorithmic components.
+    \item We conduct extensive computational experiments on the 72 standard benchmark instances of \citet{baptiste2008lagrangian}, showing that \texttt{irace} selects \texttt{swap\_crit} in 80\% of elite configurations, with the resulting algorithm matching or improving upon state-of-the-art literature results across 72.2\% of the instances and establishing 25 new best-known solutions.
 \end{enumerate}
 
 The remainder of this paper is organized as follows:
+Subsections~\ref{subsec:prob} and \ref{subsec:litrev} formulate the JITJSS problem and review the related literature, respectively.
 Section~\ref{sec:swap_crit} introduces the proposed \texttt{swap\_crit} neighborhood operator.
 Section~\ref{sec:design_space} defines the algorithmic design space and its context-free grammar.
 Section~\ref{sec:config_process} describes the automated algorithm configuration protocol.

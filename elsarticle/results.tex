@@ -42,7 +42,7 @@ Both metrics decrease sharply over the first iterations before stabilizing, show
     \label{fig:grafico_variancia}
 \end{figure}
 
-\subsection{Literature benchmark results}
+\subsection{Literature Benchmark Results}
 \label{subsec:benchmark_tests}
 
 We evaluated the generalization performance of the five elite configurations on the 72 standard JITJSS benchmark instances of \citet{baptiste2008lagrangian}.
@@ -57,7 +57,7 @@ To provide a strictly conservative evaluation margin in favor of the literature 
 
 Because the Iterated Local Search (ILS) framework executes until reaching its allocated time budget, these limits serve as the outer stopping criterion.
 Crucially, our framework logs the exact timestamp at which each global best solution is discovered.
-While all runs exhausted their allocated budgets, configuration $C_1$ converged to its final best solutions in an average of 3.7, 20.7 and 61.4 seconds for 10, 15 and 20 jobs instances, demonstrating that high-quality schedules are identified well before the conservative time horizons expire.
+While all runs exhausted their allocated budgets, configuration $C_1$ converged to its final best solutions in an average of 3.7, 20.7, and 61.4 seconds for instances with 10, 15, and 20 jobs, respectively, demonstrating that high-quality schedules are identified well before the conservative time horizons expire.
 
 
 % \input{table_results_10.tex}
@@ -68,13 +68,13 @@ While all runs exhausted their allocated budgets, configuration $C_1$ converged 
 
 \input{table_results_confs.tex}
 
-Table~\ref{tab:results_confs} summarizes performance across the test set, reporting the count of instances where the best ($B$) and median ($M$) solutions over 5 runs matched or improved the BKS.
+Table~\ref{tab:results_confs} summarizes performance across the test set, reporting the count of instances where the best ($B$) and median ($M$) solutions over five runs matched or improved the BKS.
 Configuration $C_1$ attained the highest success rate across both metrics, matching or improving the BKS in 72.2\% (best) and 48.6\% (median) of instances; we thus select it as the representative algorithm for detailed comparison.
 
 Full instance-by-instance numerical comparisons across all problem scales ($n \in \{10, 15, 20\}$) are documented in \ref{app:detailed_results}.
 
-Across the benchmark suite, $C_1$ matches or improves the BKS in 72.2\% of instances, maintaining high competitiveness across all scales: 70.8\% for $n=10$, 75\% for $n=15$, and 70.8\% for $n=20$.
-Analysis of median results further confirms algorithmic robustness: across 5 stochastic runs, the median solution matched or improved upon the literature best in 48.6\% of instances, with an average percentage deviation of only 0.96\% relative to the best individual runs.
+Across the benchmark suite, $C_1$ matches or improves the BKS in 72.2\% of instances, maintaining high competitiveness across all scales: 70.8\% for $n=10$, 75.0\% for $n=15$, and 70.8\% for $n=20$.
+Analysis of median results further confirms algorithmic robustness: across five stochastic runs, the median solution matched or improved upon the literature best in 48.6\% of instances, with an average percentage deviation of only 0.96\% relative to the best individual runs.
 
 \begin{figure}[!htbp] 
     \centering 
@@ -90,12 +90,13 @@ Points situated on or below the zero-deviation reference line denote instances w
 
 \input{table_wilcoxon.tex}
 
-Table~\ref{tab:comparacao_estado_wilcoxon} summarizes the pairwise comparison and one-tailed Wilcoxon signed-rank tests against each baseline. Across the complete 72 instances, $C_1$ matches or improves upon \citet{dos2010combination} (94.4\%), \citet{wang2014variable} (97.2\%), and \citet{ahmadian2021meta} (77.7\%), with statistically significant differences ($p < 0.05$).
+Table~\ref{tab:comparacao_estado_wilcoxon} summarizes the pairwise comparisons and one-tailed Wilcoxon signed-rank tests against each baseline.
+Across the complete set of 72 instances, $C_1$ matches or improves upon \citet{dos2010combination} (94.4\%), \citet{wang2014variable} (97.2\%), and \citet{ahmadian2021meta} (77.7\%), with statistically significant differences ($p < 0.05$).
 For the 48-instance subset evaluated by \citet{abderrazzak2022adaptive} and \citet{sabri2023reinforcement}, $C_1$ achieves success rates of 79.1\% and 81.2\%, exhibiting statistical comparability ($p = 0.09912$ and $p = 0.06681$) while successfully extending evaluation to the large-scale 20-job instances omitted by both studies.
 
 \input{table_new_upper_bounds.tex}
 
- In addition to the standalone evaluation of configuration $C_1$, we aggregated the solutions discovered across all experimental runs of the elite configurations to identify potential improvements to the benchmark's historical records.
+In addition to the standalone evaluation of configuration $C_1$, we aggregated the solutions discovered across all experimental runs of the elite configurations to identify potential improvements to the benchmark's historical records.
 Table~\ref{tab:new_bks} lists the instances where our experiments established new best-known upper bounds, reporting the previous literature reference and the newly discovered objective value.
 Across the entire suite, our framework improved the historical BKS in 25 instances, providing tighter upper bounds to support future benchmarking and exact optimization studies for the JITJSS.
 

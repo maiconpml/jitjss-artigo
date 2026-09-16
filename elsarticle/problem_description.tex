@@ -21,7 +21,7 @@ subject to:
 \end{align}
 
 The objective function~\eqref{eq:obj} minimizes the total weighted penalty for both early and late operation completions.
-Constraints~\eqref{eq:non_negative_start} and \eqref{eq:job_precedence} set the non-negative start times and enforce precedence among consecutive operations of the same job.
+Constraints~\eqref{eq:non_negative_start} and \eqref{eq:job_precedence} enforce non-negative start times and precedence among consecutive operations of the same job.
 Machine capacity is preserved by the disjunctive constraints~\eqref{eq:machine_disjunction}, which prevent overlapping operations on any machine. 
 Finally, constraints~\eqref{eq:earliness_linear}--\eqref{eq:non_negativity} linearize the earliness and tardiness values.
 % Constraint~\eqref{eq:non_negative_start} ensures that no operation starts before time zero.
@@ -44,6 +44,6 @@ A sequence $\pi$ represents a physically feasible schedule if and only if the di
 For any operation $u$, let $JP[u]$ and $JS[u]$ denote its immediate job predecessor and successor, while $MP[u]$ and $MS[u]$ represent its immediate machine predecessor and successor in sequence $\pi$.
 
 In traditional makespan minimization, scheduling operations as early as possible on a given acyclic graph $G(\pi)$ yields an optimal schedule computable in linear time via critical path method.
-In contrast, JITJSS penalizes early completions, meaning that scheduling operations as early as possible is generally non-optimal.
+In contrast, JITJSS penalizes early completions, which implies that scheduling operations as early as possible is generally suboptimal.
 For a fixed feasible operation sequence $\pi$, determining the optimal completion times $C_{ik}$ requires solving a timing sub-problem to balance earliness and tardiness penalties.
-Metaheuristic methods for JITJSS typically decompose the solution process into two stages: exploring the sequence space metaheuristics and solving the timing sub-problem for each evaluated sequence using mathematical programming \citep{dos2010combination, wang2014variable, ahmadian2021meta}.
+Metaheuristic methods for JITJSS typically decompose the solution process into two stages: exploring the sequence space via metaheuristics and solving the timing sub-problem for each evaluated sequence using mathematical programming \citep{dos2010combination, wang2014variable, ahmadian2021meta}.

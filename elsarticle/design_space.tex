@@ -2,11 +2,12 @@ To validate \texttt{swap\_crit} objectively, we construct a comprehensive algori
 Rather than constraining the evaluation to a single manually tuned algorithm, we adopt a bottom-up design space representation \citep{de2018automatic}.
 This formulation enables automated algorithm configurators to explore diverse heuristic combinations, testing whether \texttt{swap\_crit} emerges as a preferred operator and drives competitive performance.
 
-Figure~\ref{fig:grammar} formalizes this design space via a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}, where derivations from \texttt{<algorithm>} generate valid metaheuristics. Non-terminals define structural choices, such as initialization (\texttt{<initial\_sol>}), neighborhood selection (\texttt{<neighborhood>}), search strategy (\texttt{<search>}), and scheduling (\texttt{<scheduler>}), whereas terminals specify concrete operators and numeric parameters.
+Figure~\ref{fig:grammar} formalizes this design space via a context-free grammar in Backus-Naur Form (BNF) \citep{mascia2013grammars}, where derivations from \texttt{<algorithm>} generate valid metaheuristics.
+Non-terminals define structural choices, such as initialization (\texttt{<initial\_sol>}), neighborhood selection (\texttt{<neighborhood>}), search strategy (\texttt{<search>}), and scheduling (\texttt{<scheduler>}), whereas terminals specify concrete operators and numeric parameters.
 
 Following the methodology of \citet{mascia2013grammars} and \citet{mascia2014grammar}, we map non-terminal symbols directly to categorical, ordinal, or numerical parameters within an automated configuration framework.
 Derivations generate conditional parameter hierarchies, ensuring that the configurator evaluates parameters only when the corresponding algorithmic component is active.
-To accommodate recursive structures, such as nested search procedures, within a finite parameter space, we instantiate distinct parameter blocks up to maximum depth $K$, where decisions at level $i+1$ activate only when the recursive call is instantiated, making level $i+1$ choices conditional on the recursive decision at level $i$.
+To accommodate recursive structures, such as nested search procedures, within a finite parameter space, we instantiate distinct parameter blocks up to a maximum depth $K$, where decisions at level $i+1$ activate only when the recursive call is instantiated, making level $i+1$ choices conditional on the recursive decision at level $i$.
 
 \begin{figure}[!htbp]
 \centering
@@ -20,11 +21,12 @@ To accommodate recursive structures, such as nested search procedures, within a 
 \subsection{Initialization Rules}
 \label{subsec:initialization_rules}
 
-The non-terminal \texttt{<initial\_sol>} derives an initial sequence by pairing a constructive heuristic with a dispatching rule (\texttt{<dispatch\_rule>}). Available rules include Earliest Due Date (\texttt{edd}), uniform random selection (\texttt{random}), and the composite ALL+CR+SPT rule (\texttt{all\_cr\_spt}) from \citet{wang2014variable}.
+The non-terminal \texttt{<initial\_sol>} derives an initial sequence by pairing a constructive heuristic with a dispatching rule (\texttt{<dispatch\_rule>}).
+Available rules include Earliest Due Date (\texttt{edd}), uniform random selection (\texttt{random}), and the composite ALL+CR+SPT rule (\texttt{all\_cr\_spt}) from \citet{wang2014variable}.
 The first constructive option, \texttt{priority}, schedules operations sequentially from the schedulable set according to the selected dispatching rule.
 
 The second option, the Giffler--Thompson (\texttt{gt}) algorithm \citep{giffler1960algorithms}, restricts candidate selections to guarantee active schedules before breaking ties via the dispatching rule.
-We incorporate GT because it represents the standard constructive baseline across prominent JITJSS works \citep{ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement}
+We incorporate GT because it represents the standard constructive baseline across prominent JITJSS works \citep{ahmadian2021meta, abderrazzak2022adaptive, sabri2023reinforcement}.
 
 \subsection{Neighborhood Operators} 
 \label{subsec:neighborhood_operators}
@@ -39,14 +41,14 @@ The third group consists of our proposed \texttt{swap\_crit} operator (Section~\
 
 The fourth group contains \texttt{relax}, an exact hybrid operator that re-optimizes a selected sub-sequence of operations via CPLEX within a 1-second limit \citep{ahmadian2021meta}. Because CPLEX solves the sub-problem directly, \texttt{relax} produces a single deterministic move, bypassing the \texttt{<improvement>} parameter.
 
-\subsection{Search procedures}
+\subsection{Search Procedures}
 \label{subsec:search_procedures}
 
 The non-terminal symbol \texttt{<search>} selects the high-level metaheuristic search framework: Local Search (\texttt{ls}), Tabu Search (\texttt{tabu}), or Iterated Local Search (\texttt{ils}).
 Local Search represents a fundamental single-solution search procedure that iteratively explores the solution space using a selected neighborhood structure.
 Starting from an initial sequence, the LS procedure evaluates neighbor solutions according to the configured exploration mode and transitions to improving solutions until reaching a local optimum.
 
-Tabu Search (TS) escapes local optima using recency-based memory to prevent cyclic trajectories \citet{talbi}.
+Tabu Search (TS) escapes local optima using recency-based memory to prevent cyclic trajectories \citep{talbi}.
 The tabu memory records the disjunctive graph arcs broken by recent moves, prohibiting their reversal during a configurable \emph{tabu tenure} (\texttt{tenure}).
 For operation swap moves, the algorithm marks the incoming arcs of the swapped operations as tabu, whereas for insert moves, it marks the incoming arc of the relocated operation.
 During neighborhood exploration, TS selects candidate moves by priority: (i) the best move satisfying the aspiration criterion (improving the global best); (ii) the best non-tabu move; or (iii) the oldest tabu move when all candidate moves are tabu.
@@ -77,7 +79,7 @@ This cyclic progression emulates the neighborhood-change step of Variable Neighb
 \subsection{Schedulers}
 \label{subsec:exact_subsolvers}
 
-Under the non-terminal \texttt{<scheduler>}, the design space provides two timing sub-solvers that determine operation completion times $C_{ik}$ and evaluate objective penalty $z$ on the fixed acyclic graph $G(\pi)$.
+Under the non-terminal \texttt{<scheduler>}, the design space provides two timing sub-solvers that determine operation completion times $C_{ik}$ and evaluate the objective penalty $z$ on the fixed acyclic graph $G(\pi)$.
 
 The first option, \texttt{cplex}, formulates the exact timing sub-problem for sequence $\pi$ as a Linear Program (LP), invoking CPLEX to find optimal completion times $C_{ik}^*$.
 To mitigate the high computational overhead of invoking an external solver iteratively during search, \texttt{cplex} operates under a strict 1-second time limit per sequence evaluation, returning the best solution available upon timeout.
