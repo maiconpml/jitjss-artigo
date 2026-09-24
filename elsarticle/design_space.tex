@@ -54,11 +54,11 @@ For operation swap moves, the algorithm marks the incoming arcs of the swapped o
 During neighborhood exploration, TS selects candidate moves by priority: (i) the best move satisfying the aspiration criterion (improving the global best); (ii) the best non-tabu move; or (iii) the oldest tabu move when all candidate moves are tabu.
 When selecting an expired tabu move, the algorithm advances its internal clock to purge all older entries automatically.
 
-To maintain search diversification and recover from stagnation, TS incorporates an elite solution list $E$ of size $L$ (\texttt{elite\_list\_size}) alongside a non-improvement iteration counter \citep{zubaran2016tabu}.
+To maintain search diversification and recover from stagnation, TS incorporates an elite solution list $E$ of size $L$ (\texttt{elite\_list\_size}) alongside a non-improvement iteration counter \citep{zubaran2018effective}.
 The elite list $E$ stores solutions that achieve a global objective improvement, retaining their full search states, including unexplored neighborhood branches and the active tabu memory configuration at the time of discovery.
 If the search executes a maximum allowed number of consecutive non-improving iterations (\texttt{limit\_iters}), TS initiates a backjump operation to resume exploration from the elite list.
 
-In addition to monitoring non-improving iterations, TS employs a dedicated cycle detector to prevent search trajectory cycling \citep{zubaran2016tabu}.
+In addition to monitoring non-improving iterations, TS employs a dedicated cycle detector to prevent search trajectory cycling \citep{zubaran2018effective}.
 The cycle detector tracks the objective values across the last $d$ (\texttt{max\_d}) visited solutions.
 If this exact sequence repeats $c$ (\texttt{max\_c}) consecutive times, the algorithm triggers an immediate backjump operation.
 
